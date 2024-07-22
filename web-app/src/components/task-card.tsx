@@ -1,15 +1,14 @@
 "use client";
 import {useEffect, useState} from "react";
-import {getCurrentTimeAdjusted} from "@/lib/utils";
+import {timesAsString} from "@/lib/utils";
 import {FaPause, FaPen, FaPlay, FaSave, FaStop, FaTimes, FaTrash} from "react-icons/fa";
 
 export default function TaskCard({task, onDelete, onUpdate}) {
-    const [formattedTime, setFormattedTime] = useState<string>("00:00");
-    const [isRunning, setIsRunning] = useState<boolean>(task.endTime === null);
+    const [formattedTime, setFormattedTime] = useState<string>(task.endTime !== null ? timesAsString(new Date(task.endTime).getTime() - new Date(task.startTime).getTime() - task.pauseTime) : "--:--");
+    const [isRunning, setIsRunning] = useState<boolean>(task.endTime === null && task.pauseStart === null);
     const [editMode, setEditMode] = useState<boolean>(false);
     const [editedTitle, setEditedTitle] = useState<string>(task.name);
     const [editedDescription, setEditedDescription] = useState<string>(task.description);
-
 
     useEffect(() => {
         let interval;
@@ -27,7 +26,7 @@ export default function TaskCard({task, onDelete, onUpdate}) {
     }, [isRunning, task.startTime, task.pauseTime, task.pauseStart]);
 
     const handleStop = () => {
-        task.endTime = getCurrentTimeAdjusted();
+        task.endTime = new Date();
         setIsRunning(false);
         onUpdate(task);
     };
@@ -37,7 +36,7 @@ export default function TaskCard({task, onDelete, onUpdate}) {
     }
 
     const handlePause = () => {
-        const now = getCurrentTimeAdjusted();
+        const now = new Date();
         if (task.pauseStart) {
             if (task.pauseTime === undefined) {
                 task.pauseTime = 0;
@@ -116,7 +115,7 @@ export default function TaskCard({task, onDelete, onUpdate}) {
                     </> : <></>}
 
                     <p className={`text-right ${isRunning ? 'text-red-600' : 'text-gray-400'} font-mono`}>
-                        {task.pauseStart ? <FaPause className="inline-block w-2 h-2 mx-2"/> : null}
+                        {!isRunning && !task.endTime ? <FaPause className="inline-block w-2 h-2 mx-2"/> : null}
                         {isRunning ?
                             <span className="inline-block w-2 h-2 bg-red-600 rounded-full mx-2"></span> : null}
                         {formattedTime}

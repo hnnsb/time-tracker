@@ -6,7 +6,7 @@ import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.UUID;
 
 @Entity
@@ -18,9 +18,9 @@ public class Task {
     private UUID id;
     private String name;
     private String description;
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
+    private Date startTime;
+    private Date endTime;
     private String email;
     private int pauseTime;
-    private LocalDateTime pauseStart;
+    private Date pauseStart;
 }

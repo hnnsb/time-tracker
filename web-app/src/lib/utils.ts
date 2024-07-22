@@ -1,7 +1,5 @@
-export function getCurrentTimeAdjusted() {
-    const now = new Date();
-// 2. Get the timezone offset of the browser in minutes and convert it to milliseconds.
-    const timezoneOffsetMs = now.getTimezoneOffset() * 60000;
-// 3. Adjust the time to UTC by subtracting the timezone offset.
-    return new Date(now.getTime() - timezoneOffsetMs);
+export function timesAsString(duration) {
+    const seconds = Math.floor(duration / 1000) % 60;
+    const minutes = Math.floor(duration / (1000 * 60));
+    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 }

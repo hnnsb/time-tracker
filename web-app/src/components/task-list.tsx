@@ -4,7 +4,6 @@ import TaskCard from "@/components/task-card";
 import {Task} from "@/lib/model/task";
 import {useSession} from "next-auth/react";
 import {useEffect, useState} from "react";
-import {getCurrentTimeAdjusted} from "@/lib/utils";
 
 
 export default function TaskList() {
@@ -29,11 +28,12 @@ export default function TaskList() {
                     let fetchedTasks = await response.json();
                     fetchedTasks = fetchedTasks.sort((a: Task, b: Task) => new Date(b.startTime).getTime() - new Date(a.startTime).getTime());
                     setTasks(fetchedTasks);
+                    console.log("fetched tasks", fetchedTasks)
                 }
             }
         }
 
-        fetchTasks();
+        fetchTasks()
     }, [session?.user.email])
 
     async function handleDelete(taskToDelete: Task) {
@@ -105,7 +105,7 @@ export default function TaskList() {
         const newTask = {
             name: newTaskTitle,
             description: newTaskDescription,
-            startTime: getCurrentTimeAdjusted(),
+            startTime: new Date(),
             pauseTime: 0,
             pauseStart: null,
             email: session?.user.email
@@ -117,7 +117,8 @@ export default function TaskList() {
     return (
         <div>
             {showDialog && (
-                <div className="absolute top-0 left-0 right-0 bottom-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
+                <div
+                    className="absolute top-0 left-0 right-0 bottom-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
                     <div className="bg-gray-700 p-4 rounded">
                         <h2 className="text-lg">Create New Task</h2>
                         <input
