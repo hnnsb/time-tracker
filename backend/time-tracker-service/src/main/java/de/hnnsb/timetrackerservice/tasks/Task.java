@@ -21,4 +21,6 @@ public class Task {
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private String email;
+    private int pauseTime;
+    private LocalDateTime pauseStart;
 }

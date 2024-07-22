@@ -4,5 +4,7 @@ export interface Task {
     description: string;
     startTime: Date;
     endTime: Date | null | undefined;
-    userId: any;
+    pauseStart: Date | null | undefined;
+    pauseTime: number;
+    email: string;
 }

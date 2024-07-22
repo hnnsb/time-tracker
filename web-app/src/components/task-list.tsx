@@ -51,7 +51,6 @@ export default function TaskList() {
     }
 
     async function handleUpdate(updatedTask: Task) {
-        updatedTask.endTime = new Date();
         try {
             const response = await fetch(url, {
                 method: 'PUT',
@@ -78,8 +77,10 @@ export default function TaskList() {
 
         const newTask = {
             name: 'New Task',
-            description: 'Description for New Task',
+            description: '',
             startTime: getCurrentTimeAdjusted(),
+            pauseTime: 0,
+            pauseStart: null,
             email: session?.user.email
         };
         try {
@@ -115,7 +116,8 @@ export default function TaskList() {
                 <TaskCard key={task.id}
                           task={task}
                           onDelete={() => handleDelete(task)}
-                          onUpdate={() => handleUpdate(task)}></TaskCard>
+                          onUpdate={() => handleUpdate(task)}
+                ></TaskCard>
             )}
         </div>
     );
