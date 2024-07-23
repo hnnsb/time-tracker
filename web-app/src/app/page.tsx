@@ -1,7 +1,7 @@
-import TaskList from "@/components/task-list";
+import TaskList from "@/components/task/task-list";
 import {getCurrentUser} from "@/lib/session";
 import {Task} from "@/lib/model/task";
-import AuthContext from "@/app/AuthContext";
+import AuthContext from "@/contexts/AuthContext";
 
 
 export default async function Home() {

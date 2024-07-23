@@ -1,10 +1,10 @@
 "use client";
 
-import TaskCard from "@/components/task-card";
+import TaskCard from "@/components/task/task-card";
 import {Task} from "@/lib/model/task";
 import {useSession} from "next-auth/react";
 import {Fragment, useEffect, useState} from "react";
-import TaskCreateDialog from "@/components/task-create-dialog";
+import TaskCreateDialog from "@/components/task/task-create-dialog";
 
 
 export default function TaskList() {
@@ -128,10 +128,12 @@ export default function TaskList() {
             </button>
             {Object.entries(groupedTasks).map(([date, tasksForDate]) => (
                 <Fragment key={date}>
-                    <div className="">Tasks for {date}</div>
+                    <div className="mt-4">{date}</div>
                     {tasksForDate.map(task => (
-                        <TaskCard key={task.id} task={task} onDelete={() => deleteTask(task)}
-                                  onUpdate={() => putTask(task)}/>
+                        <TaskCard key={task.id} task={task}
+                                  onDelete={() => deleteTask(task)}
+                                  onUpdate={() => putTask(task)}
+                        />
                     ))}
                 </Fragment>
             ))}

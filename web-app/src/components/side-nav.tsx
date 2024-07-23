@@ -1,12 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { signIn, signOut, useSession } from "next-auth/react";
-import { useState } from "react";
-import { FaBars, FaTimes } from "react-icons/fa";
+import {signIn, signOut, useSession} from "next-auth/react";
+import {useState} from "react";
+import {FaBars, FaTimes} from "react-icons/fa";
 
 export default function SideNav() {
-    const { data: session } = useSession();
+    const {data: session} = useSession();
     const [isOpen, setIsOpen] = useState(false);
 
     function toggleNav() {
@@ -16,17 +16,20 @@ export default function SideNav() {
 
     return (
         <div>
-            <button onClick={toggleNav} className="text-lg font-semibold hover:text-gray-400 m-2">
-                {isOpen ? <FaTimes /> : <FaBars />}
+            <button onClick={toggleNav}
+                    className="text-lg font-semibold hover:text-gray-400 m-2">
+                {isOpen ? <FaTimes/> : <FaBars/>}
             </button>
-            <nav className={`side-nav w-64 h-full bg-gray-800 text-white fixed ${isOpen ? "translate-x-0" : "-translate-x-full"}`}>
+            <nav
+                className={`side-nav w-64 h-full text-white fixed ${isOpen ? "translate-x-0" : "-translate-x-full"}`}>
                 <ul className="flex flex-col p-4">
                     <li className="mb-4">
                         <Link href="/">Home</Link>
                     </li>
                     {!session ? (
                         <li className="mb-4">
-                            <button onClick={() => signIn("google")} className="text-lg font-semibold hover:text-gray-400">
+                            <button onClick={() => signIn("google")}
+                                    className="text-lg font-semibold hover:text-gray-400">
                                 Login with Google
                             </button>
                         </li>

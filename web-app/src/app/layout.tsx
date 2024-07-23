@@ -1,10 +1,10 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import type {Metadata} from "next";
+import {Inter} from "next/font/google";
 import "./globals.css";
-import AuthContext from "@/app/AuthContext";
+import AuthContext from "@/contexts/AuthContext";
 import SideNav from "@/components/side-nav";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({subsets: ["latin"]});
 
 export const metadata: Metadata = {
     title: "Time Tracker",

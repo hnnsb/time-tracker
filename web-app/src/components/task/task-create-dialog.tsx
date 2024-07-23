@@ -5,7 +5,7 @@ interface TaskDialogProps {
     onCreate: (title: string, description: string) => void;
 }
 
-export default function TaskCreateDialog({onClose, onCreate}: TaskDialogProps) {
+export default function TaskCreateDialog({onClose, onCreate}: Readonly<TaskDialogProps>) {
     const [newTaskTitle, setNewTaskTitle] = useState('New Task');
     const [newTaskDescription, setNewTaskDescription] = useState('');
 
