@@ -68,7 +68,12 @@ export default function TaskCard({task, onDelete, onUpdate}) {
     };
 
     return (
-        <div className="flex justify-between items-center mt-2 p-4 border border-gray-800 bg-gray-900 rounded">
+        <div
+            className="flex justify-between items-center mt-2 p-4
+            bg-light-bg_secondary
+            dark:bg-dark-bg_secondary
+
+            rounded">
             {editMode ? (<>
                 <form onSubmit={handleSave}>
                     <div className="flex flex-row justify-between">
@@ -90,23 +95,23 @@ export default function TaskCard({task, onDelete, onUpdate}) {
                         </div>
                         <div className="mx-2">
                             <label htmlFor="titleInput"
-                                   className="block text-sm font-medium text-gray-400">Title</label>
+                                   className="block text-sm font-medium">Title</label>
                             <input
                                 id="titleInput"
                                 type="text"
                                 value={editedTitle}
                                 onChange={(e) => setEditedTitle(e.target.value)}
-                                className="px-2 py-1 border rounded bg-gray-800"
+                                className="px-2 py-1 border rounded"
                             />
                         </div>
                         <div>
                             <label htmlFor="descriptionInput"
-                                   className="block text-sm font-medium text-gray-400">Description</label>
+                                   className="block text-sm font-medium">Description</label>
                             <textarea
                                 id="descriptionInput"
                                 value={editedDescription}
                                 onChange={(e) => setEditedDescription(e.target.value)}
-                                className="px-2 py-1 border rounded bg-gray-800"
+                                className="px-2 py-1 border rounded"
                             />
                         </div>
                     </div>
@@ -130,7 +135,7 @@ export default function TaskCard({task, onDelete, onUpdate}) {
 
                     <div className="ml-2">
                         <p className="text-lg font-semibold">{task.name}</p>
-                        <p className="text-gray-400">{task.description}</p>
+                        <p className="text-gray-600 dark:text-gray-400">{task.description}</p>
                     </div>
                 </div>
                 <div className="flex items-center flex-col sm:flex-row">
@@ -146,10 +151,11 @@ export default function TaskCard({task, onDelete, onUpdate}) {
                             <FaStop/>
                         </button>
                     </>}
-                    <span className={`text-right font-mono ${isRunning ? 'text-red-600' : 'text-gray-400'}`}>
+                    <span className={`text-right font-mono ${isRunning ? 'text-red-500' : 'dark:text-gray-400 text-gray-600'}`}>
                         <div className="flex align-center whitespace-nowrap">
                             {(!isRunning && !task.endTime) && <FaPause className="inline-block w-2 h-2 mx-2 my-auto"/>}
-                            {isRunning && <span className="inline-block w-2 h-2 bg-red-600 rounded-full mx-2 my-auto"></span>}
+                            {isRunning &&
+                                <span className="inline-block w-2 h-2 bg-red-600 rounded-full mx-2 my-auto"></span>}
                             <span>{formattedTime}</span>
                         </div>
                     </span>
