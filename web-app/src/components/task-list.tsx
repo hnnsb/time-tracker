@@ -3,7 +3,8 @@
 import TaskCard from "@/components/task-card";
 import {Task} from "@/lib/model/task";
 import {useSession} from "next-auth/react";
-import {useEffect, useState} from "react";
+import {Fragment, useEffect, useState} from "react";
+import TaskCreateDialog from "@/components/task-create-dialog";
 
 
 export default function TaskList() {
@@ -11,12 +12,9 @@ export default function TaskList() {
     const [tasks, setTasks] = useState<Task[]>([]);
     const url = "http://localhost:8080/api/tasks";
     const [showDialog, setShowDialog] = useState(false);
-    const [newTaskTitle, setNewTaskTitle] = useState('');
-    const [newTaskDescription, setNewTaskDescription] = useState('');
-
 
     useEffect(() => {
-        async function fetchTasks() {
+        async function getTasks() {
             if (session?.user.email) {
                 const response = await fetch(`${url}?email=${session.user.email}`, {
                     method: 'GET',
@@ -33,10 +31,10 @@ export default function TaskList() {
             }
         }
 
-        fetchTasks()
+        getTasks()
     }, [session?.user.email])
 
-    async function handleDelete(taskToDelete: Task) {
+    async function deleteTask(taskToDelete: Task) {
         try {
             const response = await fetch(`${url}/${taskToDelete.id}`, {
                 method: 'DELETE',
@@ -48,13 +46,14 @@ export default function TaskList() {
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
+
             setTasks(tasks.filter(task => task.id !== taskToDelete.id))
         } catch (error) {
             console.error("Error during fetch:", error);
         }
     }
 
-    async function handleUpdate(updatedTask: Task) {
+    async function putTask(updatedTask: Task) {
         try {
             const response = await fetch(url, {
                 method: 'PUT',
@@ -67,13 +66,14 @@ export default function TaskList() {
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
+
             setTasks(tasks.map(task => task.id === updatedTask.id ? updatedTask : task));
         } catch (error) {
             console.error("Error during fetch:", error);
         }
     }
 
-    async function handleCreate(newTask) {
+    async function postTask(newTask) {
         try {
             const response = await fetch(url, {
                 method: 'POST',
@@ -94,54 +94,30 @@ export default function TaskList() {
         }
     }
 
+    const groupedTasks = tasks.reduce((acc, task) => {
+        const date = new Date(task.startTime).toDateString(); // Convert to a simple date string
+        if (!acc[date]) {
+            acc[date] = [];
+        }
+        acc[date].push(task);
+        return acc;
+    }, {});
+
     const handleDialogOpen = () => {
         setShowDialog(true);
     };
 
-    const handleDialogClose = () => {
+    const handleCreateNewTask = (newTaskTitle, newTaskDescription) => {
+        const newTask = new Task(newTaskTitle, newTaskDescription, new Date(), session?.user.email);
+        postTask(newTask);
         setShowDialog(false);
-    };
-    const handleCreateNewTask = () => {
-        const newTask = {
-            name: newTaskTitle,
-            description: newTaskDescription,
-            startTime: new Date(),
-            pauseTime: 0,
-            pauseStart: null,
-            email: session?.user.email
-        };
-        handleCreate(newTask);
-        handleDialogClose();
     };
 
     return (
         <div>
             {showDialog && (
-                <div
-                    className="absolute top-0 left-0 right-0 bottom-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
-                    <div className="bg-gray-700 p-4 rounded">
-                        <h2 className="text-lg">Create New Task</h2>
-                        <input
-                            type="text"
-                            placeholder="Title"
-                            value={newTaskTitle}
-                            onChange={(e) => setNewTaskTitle(e.target.value)}
-                            className="border bg-gray-800 p-2 w-full mb-2"
-                        />
-                        <textarea
-                            placeholder="Description"
-                            value={newTaskDescription}
-                            onChange={(e) => setNewTaskDescription(e.target.value)}
-                            className="border bg-gray-800 p-2 w-full mb-2"
-                        ></textarea>
-                        <button onClick={handleCreateNewTask} className="px-4 py-2 bg-blue-500 text-white rounded mr-2">
-                            Create
-                        </button>
-                        <button onClick={handleDialogClose} className="px-4 py-2 bg-gray-500 text-white rounded">
-                            Cancel
-                        </button>
-                    </div>
-                </div>
+                <TaskCreateDialog onCreate={handleCreateNewTask}
+                                  onClose={() => setShowDialog(false)}></TaskCreateDialog>
             )}
             <button
                 className={`px-4 py-2 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-opacity-50 ${!session?.user ? 'opacity-50 cursor-not-allowed' : ''}`}
@@ -150,13 +126,15 @@ export default function TaskList() {
             >
                 Create Task
             </button>
-            {tasks.map(task =>
-                <TaskCard key={task.id}
-                          task={task}
-                          onDelete={() => handleDelete(task)}
-                          onUpdate={() => handleUpdate(task)}
-                ></TaskCard>
-            )}
+            {Object.entries(groupedTasks).map(([date, tasksForDate]) => (
+                <Fragment key={date}>
+                    <div className="">Tasks for {date}</div>
+                    {tasksForDate.map(task => (
+                        <TaskCard key={task.id} task={task} onDelete={() => deleteTask(task)}
+                                  onUpdate={() => putTask(task)}/>
+                    ))}
+                </Fragment>
+            ))}
         </div>
     );
 }
