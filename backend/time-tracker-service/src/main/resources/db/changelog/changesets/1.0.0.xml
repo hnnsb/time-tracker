@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet id="1" author="admin">
+        <sql>
+            CREATE TABLE task (
+                id UUID PRIMARY KEY,
+                name VARCHAR(255) NOT NULL,
+                description VARCHAR(255),
+                start_time TIMESTAMP NOT NULL,
+                end_time TIMESTAMP,
+                email VARCHAR(255) NOT NULL,
+                pause_time INT,
+                pause_start TIMESTAMP
+            );
+        </sql>
+    </changeSet>
+</databaseChangeLog>

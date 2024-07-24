@@ -1,0 +1,36 @@
+# version: '3.9'
+
+networks:
+  postgres-spring-network:
+
+services:
+  app:
+    container_name: time-tracker-service
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5005:5005"
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      #-JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
+      - DB_URL=jdbc:postgresql://db:5432/time_tracker
+      - DB_USER=springuser
+      - DB_PASSWORD=springpassword
+    depends_on:
+      - db
+    networks:
+      - postgres-spring-network
+
+  db:
+    container_name: time-tracker-db
+    image: postgres:16
+    environment:
+      - POSTGRES_DB=time_tracker
+      - POSTGRES_USER=springuser
+      - POSTGRES_PASSWORD=springpassword
+    ports:
+      - "5432:5432"
+    networks:
+      - postgres-spring-network

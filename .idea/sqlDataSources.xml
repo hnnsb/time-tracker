@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DdlMappings">
+    <mapping uuid="acfdbeba-460e-4770-be71-bbfa855fe77c" name="time_tracker@localhost Mapping">
+      <data-sources db="11494b98-dd23-4a7d-a4fa-c6813964d2b8" />
+      <scope>
+        <node kind="database">
+          <name qname="postgres" />
+          <name qname="time_tracker" />
+        </node>
+      </scope>
+    </mapping>
+  </component>
+</project>

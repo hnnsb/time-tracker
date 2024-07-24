@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="TimeTrackerServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
-    <option name="ACTIVE_PROFILES" value="dev" />
+    <option name="ACTIVE_PROFILES" value="local" />
     <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
     <module name="time-tracker-service.main" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="de.hnnsb.timetrackerservice.TimeTrackerServiceApplication" />
