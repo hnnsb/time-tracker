@@ -2,8 +2,9 @@
 import {useEffect, useState} from "react";
 import {timesAsString} from "@/lib/utils";
 import {FaPause, FaPen, FaPlay, FaSave, FaStop, FaTimes, FaTrash} from "react-icons/fa";
+import {Task} from "@/lib/model/task";
 
-export default function TaskCard({task, onDelete, onUpdate}) {
+export default function TaskCard({task, onDelete, onUpdate}: Readonly<{ task: Task, onDelete: any, onUpdate: any }>) {
     const [formattedTime, setFormattedTime] = useState<string>(task.endTime !== null ? timesAsString(new Date(task.endTime).getTime() - new Date(task.startTime).getTime() - task.pauseTime) : "--:--");
     const [isRunning, setIsRunning] = useState<boolean>(task.endTime === null && task.pauseStart === null);
     const [editMode, setEditMode] = useState<boolean>(false);

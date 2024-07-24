@@ -126,7 +126,7 @@ export default function TaskList() {
             >
                 Create Task
             </button>
-            {Object.entries(groupedTasks).map(([date, tasksForDate]) => (
+            {Object.entries(groupedTasks).map(([date, tasksForDate]: [date: string, tasksForDate: Task[]]) => (
                 <Fragment key={date}>
                     <div className="mt-4">{date}</div>
                     {tasksForDate.map(task => (
