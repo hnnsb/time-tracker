@@ -22,34 +22,36 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<Task> getTasksByEmail(String email) {
-        log.info("Getting tasks");
+        log.info("Getting tasks for: {}", email);
         return taskRepository.findByEmail(email);
     }
 
     @Override
     public Task createTask(Task task) {
-        log.info("Creating task: " + task);
-        return taskRepository.save(task);
+        task = taskRepository.save(task);
+        log.info("Created task: {}", task.getId());
+        return task;
     }
 
     @Override
     public void deleteTask(UUID id) {
-        log.info("Deleting task with id: " + id);
+        log.info("Deleting task with id: {}", id);
         taskRepository.deleteById(id);
     }
 
     @Override
     public Task updateTask(Task task) {
         if (taskRepository.existsById(task.getId())) {
-            log.info("Updating task: " + task);
+            log.info("Updating task: {}", task.getId());
         } else {
-            log.warn("Creating task on update: " + task);
+            log.info("Creating task on update: {}", task.getId());
         }
         return taskRepository.save(task);
     }
 
     @Override
     public Task getTask(UUID id) {
+        log.info("Getting task with id: {}", id);
         return taskRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 }
