@@ -19,3 +19,14 @@ body main {
 .side-nav {
   transition: transform 0.3s ease;
 }
+
+/* Category Card Component*/
+.category-card-buttons {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.category-card:hover .category-card-buttons {
+  display: flex;
+  opacity: 1;
+}
