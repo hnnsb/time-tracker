@@ -16,11 +16,14 @@ export class Task {
         this.description = description;
         this.startTime = startTime;
         this.email = email;
-        this.category = category;
+        if (category) {
+            this.category = category;
+        } else {
+            this.category = null;
+        }
 
         this.endTime = null;
         this.pauseStart = null;
         this.pauseTime = 0;
-        this.category = null;
     }
 }

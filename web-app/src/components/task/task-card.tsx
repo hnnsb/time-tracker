@@ -4,7 +4,11 @@ import {timesAsString} from "@/lib/utils";
 import {FaPause, FaPen, FaPlay, FaSave, FaStop, FaTimes, FaTrash} from "react-icons/fa";
 import {Task} from "@/lib/model/task";
 
-export default function TaskCard({task, categories, onDelete, onUpdate}: Readonly<{ task: Task, onDelete: any, onUpdate: any }>) {
+export default function TaskCard({task, categories, onDelete, onUpdate}: Readonly<{
+    task: Task,
+    onDelete: any,
+    onUpdate: any
+}>) {
     const [formattedTime, setFormattedTime] = useState<string>(task.endTime !== null ? timesAsString(new Date(task.endTime).getTime() - new Date(task.startTime).getTime() - task.pauseTime) : "--:--");
     const [isRunning, setIsRunning] = useState<boolean>(task.endTime === null && task.pauseStart === null);
     const [editMode, setEditMode] = useState<boolean>(false);
@@ -98,34 +102,38 @@ export default function TaskCard({task, categories, onDelete, onUpdate}: Readonl
                                 </button>
                             </div>
                         </div>
-                        <div className="mx-2">
-                            <label htmlFor="titleInput"
-                                   className="block text-sm font-medium">Title</label>
-                            <input
-                                id="titleInput"
-                                type="text"
-                                value={editedTitle}
-                                onChange={(e) => setEditedTitle(e.target.value)}
-                                className="px-2 py-1 border rounded"
-                            />
-                        </div>
-                        <div>
-                            <label htmlFor="descriptionInput"
-                                   className="block text-sm font-medium">Description</label>
-                            <textarea
-                                id="descriptionInput"
-                                value={editedDescription}
-                                onChange={(e) => setEditedDescription(e.target.value)}
-                                className="px-2 py-1 border rounded"
-                            />
-                        </div>
-                        <div>
-                            <label htmlFor="categoryInput"
-                                   className="block text-sm font-medium">Category</label>
-                            <select value={task.category?.id} onChange={handelChangeCategory}>
-                                <option value={null}>Select Category</option>
-                                {categories.map(category => (<option value={category.id} key={category.id}>{category.name}</option>))}
-                            </select>
+                        <div className="flex flex-col lg:flex-row p-2">
+                            <div className="flex flex-col mb-2 mr-2">
+                                <label htmlFor="titleInput"
+                                       className="block text-sm font-medium">Title</label>
+                                <input
+                                    id="titleInput"
+                                    type="text"
+                                    value={editedTitle}
+                                    onChange={(e) => setEditedTitle(e.target.value)}
+                                    className="px-2 py-1 border rounded"
+                                />
+                            </div>
+                            <div className="flex flex-col mb-2 mr-2">
+                                <label htmlFor="descriptionInput"
+                                       className="block text-sm font-medium">Description</label>
+                                <textarea
+                                    id="descriptionInput"
+                                    value={editedDescription}
+                                    onChange={(e) => setEditedDescription(e.target.value)}
+                                    className="px-2 py-1 border rounded"
+                                />
+                            </div>
+                            <div className="flex flex-col mb-2 mr-2">
+                                <label htmlFor="categoryInput"
+                                       className="block text-sm font-medium">Category</label>
+                                <select className="px-2 py-1 border rounded" value={task.category?.id}
+                                        onChange={handelChangeCategory}>
+                                    <option value={null}>Select Category</option>
+                                    {categories.map(category => (
+                                        <option value={category.id} key={category.id}>{category.name}</option>))}
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </form>

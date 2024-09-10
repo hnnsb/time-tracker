@@ -10,6 +10,7 @@ import {Category} from "@/lib/model/category";
 import {deleteCategory, getCategories, postCategory, putCategory} from "@/app/api/categories";
 import {deleteTask, getTasks, postTask, putTask} from "@/app/api/tasks";
 import CategoryDropdown from "@/components/category/category-dropdown";
+import {Button} from "react-bootstrap";
 
 export default function TaskList() {
     const {data: session} = useSession();
@@ -125,21 +126,21 @@ export default function TaskList() {
 
 function TaskManagerControls({onTaskDialogOpen, onCategoryDialogOpen, isUserLoggedIn}) {
     return (
-        <div className="">
-            <button
-                className={`px-4 py-2 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-opacity-50 ${!isUserLoggedIn ? 'opacity-50 cursor-not-allowed' : ''}`}
+        <div>
+            <Button
+                className={`m-1 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-opacity-50 ${!isUserLoggedIn ? 'opacity-50 cursor-not-allowed' : ''}`}
                 onClick={onTaskDialogOpen}
                 disabled={!isUserLoggedIn}
             >
                 Create Task
-            </button>
-            <button
-                className={`px-4 py-2 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-opacity-50 ${!isUserLoggedIn ? 'opacity-50 cursor-not-allowed' : ''}`}
+            </Button>
+            <Button
+                className={`m-1 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-opacity-50 ${!isUserLoggedIn ? 'opacity-50 cursor-not-allowed' : ''}`}
                 onClick={onCategoryDialogOpen}
                 disabled={!isUserLoggedIn}
             >
                 Create Category
-            </button>
+            </Button>
         </div>
     );
 }

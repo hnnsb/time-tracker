@@ -31,7 +31,11 @@ export default function TaskCreateDialog({onClose, onCreate, categories}: Readon
                     onChange={(e) => setNewTaskDescription(e.target.value)}
                     className="border p-2 w-full mb-2 dark:bg-gray-700"
                 ></textarea>
-                <select value={newTaskCategory} onChange={(e) => setNewTaskCategory(e.target.value)}>
+                <select
+                    className="border p-2 w-full mb-2 dark:bg-gray-700"
+                    value={newTaskCategory}
+                    onChange={(e) => setNewTaskCategory(e.target.value)}
+                >
                     <option value={null}>Select Category</option>
                     {categories.map(category => (<option value={category.id} key={category.id}>{category.name}</option>))}
                 </select>
