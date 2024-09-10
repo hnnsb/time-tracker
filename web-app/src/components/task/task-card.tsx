@@ -4,7 +4,7 @@ import {timesAsString} from "@/lib/utils";
 import {FaPause, FaPen, FaPlay, FaSave, FaStop, FaTimes, FaTrash} from "react-icons/fa";
 import {Task} from "@/lib/model/task";
 
-export default function TaskCard({task, onDelete, onUpdate}: Readonly<{ task: Task, onDelete: any, onUpdate: any }>) {
+export default function TaskCard({task, categories, onDelete, onUpdate}: Readonly<{ task: Task, onDelete: any, onUpdate: any }>) {
     const [formattedTime, setFormattedTime] = useState<string>(task.endTime !== null ? timesAsString(new Date(task.endTime).getTime() - new Date(task.startTime).getTime() - task.pauseTime) : "--:--");
     const [isRunning, setIsRunning] = useState<boolean>(task.endTime === null && task.pauseStart === null);
     const [editMode, setEditMode] = useState<boolean>(false);
@@ -68,13 +68,17 @@ export default function TaskCard({task, onDelete, onUpdate}: Readonly<{ task: Ta
         setEditMode(false);
     };
 
+    const handelChangeCategory = (e) => {
+        task.category = categories.filter(c => c.id === e.target.value)[0];
+    }
+
     return (
         <div
             className="flex justify-between items-center mt-2 p-4
             bg-light-bg_secondary
             dark:bg-dark-bg_secondary
-
-            rounded">
+            rounded"
+        >
             {editMode ? (<>
                 <form onSubmit={handleSave}>
                     <div className="flex flex-row justify-between">
@@ -115,6 +119,14 @@ export default function TaskCard({task, onDelete, onUpdate}: Readonly<{ task: Ta
                                 className="px-2 py-1 border rounded"
                             />
                         </div>
+                        <div>
+                            <label htmlFor="categoryInput"
+                                   className="block text-sm font-medium">Category</label>
+                            <select value={task.category?.id} onChange={handelChangeCategory}>
+                                <option value={null}>Select Category</option>
+                                {categories.map(category => (<option value={category.id} key={category.id}>{category.name}</option>))}
+                            </select>
+                        </div>
                     </div>
                 </form>
                 <div className="m-x-auto">
@@ -135,6 +147,10 @@ export default function TaskCard({task, onDelete, onUpdate}: Readonly<{ task: Ta
                     </div>
 
                     <div className="ml-2">
+                        <p className={`text-sm font-semibold`}
+                           style={{color: task.category ? task.category.color : 'gray'}}>
+                            {task.category ? task.category.name : 'No Category'}
+                        </p>
                         <p className="text-lg font-semibold">{task.name}</p>
                         <p className="text-gray-600 dark:text-gray-400">{task.description}</p>
                     </div>
@@ -152,7 +168,8 @@ export default function TaskCard({task, onDelete, onUpdate}: Readonly<{ task: Ta
                             <FaStop/>
                         </button>
                     </>}
-                    <span className={`text-right font-mono ${isRunning ? 'text-red-500' : 'dark:text-gray-400 text-gray-600'}`}>
+                    <span
+                        className={`text-right font-mono ${isRunning ? 'text-red-500' : 'dark:text-gray-400 text-gray-600'}`}>
                         <div className="flex align-center whitespace-nowrap">
                             {(!isRunning && !task.endTime) && <FaPause className="inline-block w-2 h-2 mx-2 my-auto"/>}
                             {isRunning &&

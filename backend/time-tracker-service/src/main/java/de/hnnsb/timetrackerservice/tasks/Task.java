@@ -1,8 +1,10 @@
 package de.hnnsb.timetrackerservice.tasks;
 
+import de.hnnsb.timetrackerservice.categories.Category;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,4 +25,6 @@ public class Task {
     private String email;
     private int pauseTime;
     private Date pauseStart;
+    @ManyToOne
+    private Category category;
 }

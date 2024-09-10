@@ -1,13 +1,16 @@
 import React, {useState} from 'react';
+import {Category} from "@/lib/model/category";
 
 interface TaskDialogProps {
     onClose: () => void;
-    onCreate: (title: string, description: string) => void;
+    onCreate: (title: string, description: string, category?: Category) => void;
+    categories: Category[];
 }
 
-export default function TaskCreateDialog({onClose, onCreate}: Readonly<TaskDialogProps>) {
+export default function TaskCreateDialog({onClose, onCreate, categories}: Readonly<TaskDialogProps>) {
     const [newTaskTitle, setNewTaskTitle] = useState('New Task');
     const [newTaskDescription, setNewTaskDescription] = useState('');
+    const [newTaskCategory, setNewTaskCategory] = useState('');
 
     return (
         <div
@@ -28,9 +31,13 @@ export default function TaskCreateDialog({onClose, onCreate}: Readonly<TaskDialo
                     onChange={(e) => setNewTaskDescription(e.target.value)}
                     className="border p-2 w-full mb-2 dark:bg-gray-700"
                 ></textarea>
-                <button onClick={() => onCreate(newTaskTitle, newTaskDescription)}
+                <select value={newTaskCategory} onChange={(e) => setNewTaskCategory(e.target.value)}>
+                    <option value={null}>Select Category</option>
+                    {categories.map(category => (<option value={category.id} key={category.id}>{category.name}</option>))}
+                </select>
+                <button onClick={() => onCreate(newTaskTitle, newTaskDescription, categories.filter(c => c.id === newTaskCategory)[0])}
                         className="px-4 py-2 text-white bg-blue-600 rounded mr-2">
-                    Create
+                    Save
                 </button>
                 <button onClick={onClose} className="px-4 py-2 text-white bg-gray-500 rounded">
                     Cancel

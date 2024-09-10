@@ -5,6 +5,13 @@
                    https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
     <changeSet id="1" author="admin">
         <sql>
+            CREATE TABLE category (
+                  id UUID PRIMARY KEY,
+                  name VARCHAR(255) NOT NULL,
+                  email VARCHAR(255) NOT NULL,
+                  color VARCHAR(255)
+            );
+
             CREATE TABLE task (
                 id UUID PRIMARY KEY,
                 name VARCHAR(255) NOT NULL,
@@ -13,7 +20,9 @@
                 end_time TIMESTAMP,
                 email VARCHAR(255) NOT NULL,
                 pause_time INT,
-                pause_start TIMESTAMP
+                pause_start TIMESTAMP,
+                category_id UUID,
+                CONSTRAINT fk_category FOREIGN KEY(category_id) REFERENCES category(id) ON DELETE SET NULL
             );
         </sql>
     </changeSet>

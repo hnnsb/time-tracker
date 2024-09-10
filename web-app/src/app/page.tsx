@@ -6,6 +6,7 @@ export default async function Home() {
     return (
         <div className="container m-auto">
             <AuthContext>
+
                 <TaskList></TaskList>
             </AuthContext>
         </div>
