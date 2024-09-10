@@ -4,14 +4,12 @@ import {useSession} from "next-auth/react";
 import {Fragment, useEffect, useState} from "react";
 import TaskCreateDialog from "@/components/task/task-create-dialog";
 import CategoryCreateDialog from "@/components/category/category-create-dialog";
-import Dropdown from "react-bootstrap/Dropdown";
-import {DropdownButton} from "react-bootstrap";
 import TaskCard from "@/components/task/task-card";
-import CategoryCard from "@/components/category/category-card";
 import {Task} from "@/lib/model/task";
 import {Category} from "@/lib/model/category";
 import {deleteCategory, getCategories, postCategory, putCategory} from "@/app/api/categories";
 import {deleteTask, getTasks, postTask, putTask} from "@/app/api/tasks";
+import CategoryDropdown from "@/components/category/category-dropdown";
 
 export default function TaskList() {
     const {data: session} = useSession();
@@ -64,7 +62,7 @@ export default function TaskList() {
         setShowCategoryDialog(false);
     };
 
-    const handleDeleteCategory = async (category: Category) =>{
+    const handleDeleteCategory = async (category: Category) => {
         deleteCategory(category.id).then(() => setCategories(categories.filter(c => c.id !== category.id)));
         tasks.forEach(task => {
             if (task.category?.id === category.id) {
@@ -97,32 +95,16 @@ export default function TaskList() {
                     color={categoryToEdit?.color}
                 />
             )}
-            <button
-                className={`px-4 py-2 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-opacity-50 ${!session?.user ? 'opacity-50 cursor-not-allowed' : ''}`}
-                onClick={handleTaskDialogOpen}
-                disabled={!session?.user}
-            >
-                Create Task
-            </button>
-            <button
-                className={`px-4 py-2 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-opacity-50 ${!session?.user ? 'opacity-50 cursor-not-allowed' : ''}`}
-                onClick={() => handleCategoryDialogOpen(null)}
-                disabled={!session?.user}
-            >
-                Create Category
-            </button>
-            <DropdownButton id="dropdown-basic" title="Categories">
-                {categories.map(category => (
-                    <Dropdown.Item key={category.id}>
-                        {category.name}
-                        <CategoryCard
-                            category={category}
-                            onDelete={() => handleDeleteCategory(category)}
-                            onEdit={() => handleCategoryDialogOpen(category)}
-                        />
-                    </Dropdown.Item>
-                ))}
-            </DropdownButton>
+            <div className="flex justify-between">
+                <TaskManagerControls isUserLoggedIn={session?.user}
+                                     onCategoryDialogOpen={() => handleCategoryDialogOpen(null)}
+                                     onTaskDialogOpen={handleTaskDialogOpen}
+                />
+                <CategoryDropdown categories={categories}
+                                  onEdit={handleCategoryDialogOpen}
+                                  onDelete={handleDeleteCategory}
+                />
+            </div>
             {Object.entries(groupedTasks).map(([date, tasksForDate]: [string, Task[]]) => (
                 <Fragment key={date}>
                     <div className="mt-4">{date}</div>
@@ -137,6 +119,27 @@ export default function TaskList() {
                     ))}
                 </Fragment>
             ))}
+        </div>
+    );
+}
+
+function TaskManagerControls({onTaskDialogOpen, onCategoryDialogOpen, isUserLoggedIn}) {
+    return (
+        <div className="">
+            <button
+                className={`px-4 py-2 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-opacity-50 ${!isUserLoggedIn ? 'opacity-50 cursor-not-allowed' : ''}`}
+                onClick={onTaskDialogOpen}
+                disabled={!isUserLoggedIn}
+            >
+                Create Task
+            </button>
+            <button
+                className={`px-4 py-2 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-opacity-50 ${!isUserLoggedIn ? 'opacity-50 cursor-not-allowed' : ''}`}
+                onClick={onCategoryDialogOpen}
+                disabled={!isUserLoggedIn}
+            >
+                Create Category
+            </button>
         </div>
     );
 }
