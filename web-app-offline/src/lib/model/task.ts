@@ -1,4 +1,5 @@
 import { Category } from "./category";
+import { v4 as uuidv4 } from "uuid";
 
 export class Task {
   id: string | undefined;
@@ -10,7 +11,13 @@ export class Task {
   pauseTime: number;
   category: Category | null;
 
-  constructor(name, description, startTime, category?) {
+  constructor(
+    name: string,
+    description: string,
+    startTime: Date,
+    category?: Category,
+  ) {
+    this.id = uuidv4();
     this.name = name;
     this.description = description;
     this.startTime = startTime;

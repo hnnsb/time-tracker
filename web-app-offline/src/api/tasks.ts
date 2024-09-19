@@ -1,60 +1,34 @@
 import { Task } from "../lib/model/task";
+import { getFromLocalStorage, saveToLocalStorage } from "../lib/localStorage";
 
-const taskUrl = "http://localhost:8080/api/tasks";
+const TASKS_KEY = "tasks";
 
-export async function getTasks(email: string): Promise<Task[]> {
-  const response = await fetch(`${taskUrl}?email=${email}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  if (response.ok) {
-    let fetchedTasks = await response.json();
-    return fetchedTasks.sort(
-      (a: Task, b: Task) =>
-        new Date(b.startTime).getTime() - new Date(a.startTime).getTime(),
-    );
-  }
-  throw new Error(`HTTP error! status: ${response.status}`);
+export function getTasks() {
+  const tasks = getFromLocalStorage(TASKS_KEY) || [];
+  return tasks.sort(
+    (a: Task, b: Task) =>
+      new Date(b.startTime).getTime() - new Date(a.startTime).getTime(),
+  );
 }
 
-export async function deleteTask(taskId: string): Promise<void> {
-  const response = await fetch(`${taskUrl}/${taskId}`, {
-    method: "DELETE",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
+export function deleteTask(taskId: string) {
+  let tasks = getFromLocalStorage(TASKS_KEY) || [];
+  tasks = tasks.filter((task: Task) => task.id !== taskId);
+  saveToLocalStorage(TASKS_KEY, tasks);
 }
 
-export async function putTask(updatedTask: Task): Promise<Task> {
-  const response = await fetch(taskUrl, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(updatedTask),
-  });
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
-  return await response.json();
+export function putTask(updatedTask: Task) {
+  let tasks = getFromLocalStorage(TASKS_KEY) || [];
+  tasks = tasks.map((task: Task) =>
+    task.id === updatedTask.id ? updatedTask : task,
+  );
+  saveToLocalStorage(TASKS_KEY, tasks);
+  return updatedTask;
 }
 
-export async function postTask(newTask: Task): Promise<Task> {
-  const response = await fetch(taskUrl, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(newTask),
-  });
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
-  return await response.json();
+export function postTask(newTask: Task) {
+  const tasks = getFromLocalStorage(TASKS_KEY) || [];
+  tasks.push(newTask);
+  saveToLocalStorage(TASKS_KEY, tasks);
+  return newTask;
 }

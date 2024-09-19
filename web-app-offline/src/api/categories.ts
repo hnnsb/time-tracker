@@ -1,61 +1,35 @@
 import { Category } from "../lib/model/category";
+import { getFromLocalStorage, saveToLocalStorage } from "../lib/localStorage";
 
-const categoryUrl = "http://localhost:8080/api/categories";
+const CATEGORIES_KEY = "categories";
 
-export async function getCategories(email: string): Promise<Category[]> {
-  const response = await fetch(`${categoryUrl}?email=${email}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  if (response.ok) {
-    const categories = await response.json();
-    return categories.sort((a: Category, b: Category) =>
-      a.name.localeCompare(b.name),
-    );
-  }
-  throw new Error(`HTTP error! status: ${response.status}`);
+export function getCategories(email: string): Category[] {
+  const categories: Category[] = getFromLocalStorage(CATEGORIES_KEY) || [];
+  return categories.sort((a: Category, b: Category) =>
+    a.name.localeCompare(b.name),
+  );
 }
 
-export async function deleteCategory(categoryId: string): Promise<void> {
-  const response = await fetch(`${categoryUrl}/${categoryId}`, {
-    method: "DELETE",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
+export function deleteCategory(categoryId: string) {
+  let categories: Category[] = getFromLocalStorage(CATEGORIES_KEY) || [];
+  categories = categories.filter(
+    (category: Category) => category.id !== categoryId,
+  );
+  saveToLocalStorage(CATEGORIES_KEY, categories);
 }
 
-export async function putCategory(
-  updatedCategory: Category,
-): Promise<Category> {
-  const response = await fetch(categoryUrl, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(updatedCategory),
-  });
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
-  return await response.json();
+export function putCategory(updatedCategory: Category): Category {
+  let categories = getFromLocalStorage(CATEGORIES_KEY) || [];
+  categories = categories.map((category: Category) =>
+    category.id === updatedCategory.id ? updatedCategory : category,
+  );
+  saveToLocalStorage(CATEGORIES_KEY, categories);
+  return updatedCategory;
 }
 
-export async function postCategory(newCategory: Category): Promise<Category> {
-  const response = await fetch(categoryUrl, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(newCategory),
-  });
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
-  return await response.json();
+export function postCategory(newCategory: Category): Category {
+  const categories = getFromLocalStorage(CATEGORIES_KEY) || [];
+  categories.push(newCategory);
+  saveToLocalStorage(CATEGORIES_KEY, categories);
+  return newCategory;
 }

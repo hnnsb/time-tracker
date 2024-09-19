@@ -2,15 +2,16 @@ import { Fragment, useState } from "react";
 import { Button } from "react-bootstrap";
 import { Task } from "../lib/model/task";
 import { Category } from "../lib/model/category";
-import { deleteTask, postTask, putTask } from "../api/tasks";
+import { deleteTask, getTasks, postTask, putTask } from "../api/tasks";
 import { deleteCategory, postCategory, putCategory } from "../api/categories";
 import TaskCreateDialog from "../components/task/task-create-dialog";
 import CategoryCreateDialog from "../components/category/category-create-dialog";
 import CategoryDropdown from "../components/category/category-dropdown";
 import TaskCard from "../components/task/task-card";
+import { clearLocalStorage } from "../lib/localStorage";
 
 export default function TaskList() {
-  const [tasks, setTasks] = useState<Task[]>([]);
+  const [tasks, setTasks] = useState<Task[]>(getTasks());
   const [categories, setCategories] = useState<Category[]>([]);
   const [showTaskDialog, setShowTaskDialog] = useState(false);
   const [showCategoryDialog, setShowCategoryDialog] = useState(false);
@@ -25,7 +26,7 @@ export default function TaskList() {
 
   const handleCreateNewTask = async (title, description, category?) => {
     const newTask = new Task(title, description, new Date(), category);
-    const createdTask = await postTask(newTask);
+    const createdTask = postTask(newTask);
     setTasks([createdTask, ...tasks]);
     setShowTaskDialog(false);
   };
@@ -34,7 +35,7 @@ export default function TaskList() {
     if (categoryToEdit) {
       categoryToEdit.name = title;
       categoryToEdit.color = color;
-      const updatedCategory = await putCategory(categoryToEdit);
+      const updatedCategory = putCategory(categoryToEdit);
       setCategories(
         categories.map((category) =>
           category.id === updatedCategory.id ? updatedCategory : category,
@@ -50,16 +51,15 @@ export default function TaskList() {
       setTasks(updatedTasks);
     } else {
       const newCategory = new Category(title, color);
-      const createdCategory = await postCategory(newCategory);
+      const createdCategory = postCategory(newCategory);
       setCategories([createdCategory, ...categories]);
     }
     setShowCategoryDialog(false);
   };
 
   const handleDeleteCategory = async (category: Category) => {
-    deleteCategory(category.id).then(() =>
-      setCategories(categories.filter((c) => c.id !== category.id)),
-    );
+    deleteCategory(category.id);
+    setCategories(categories.filter((c) => c.id !== category.id));
     tasks.forEach((task) => {
       if (task.category?.id === category.id) {
         task.category = null;
@@ -111,20 +111,18 @@ export default function TaskList() {
                 key={task.id}
                 task={task}
                 categories={categories}
-                onDelete={() =>
-                  deleteTask(task.id).then(() =>
-                    setTasks(tasks.filter((t) => t.id !== task.id)),
-                  )
-                }
-                onUpdate={() =>
-                  putTask(task).then((updatedTask) =>
-                    setTasks(
-                      tasks.map((t) =>
-                        t.id === updatedTask.id ? updatedTask : t,
-                      ),
+                onDelete={() => {
+                  deleteTask(task.id);
+                  setTasks(tasks.filter((t) => t.id !== task.id));
+                }}
+                onUpdate={() => {
+                  const updatedTask = putTask(task);
+                  setTasks(
+                    tasks.map((t) =>
+                      t.id === updatedTask.id ? updatedTask : t,
                     ),
-                  )
-                }
+                  );
+                }}
               />
             ))}
           </Fragment>
@@ -153,6 +151,7 @@ function TaskManagerControls({ onTaskDialogOpen, onCategoryDialogOpen }) {
       >
         Create Category
       </Button>
+      <Button onClick={clearLocalStorage}>Clear Storage</Button>
     </div>
   );
 }
