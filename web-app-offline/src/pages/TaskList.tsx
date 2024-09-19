@@ -8,7 +8,6 @@ import TaskCreateDialog from "../components/task/task-create-dialog";
 import CategoryCreateDialog from "../components/category/category-create-dialog";
 import CategoryDropdown from "../components/category/category-dropdown";
 import TaskCard from "../components/task/task-card";
-import { clearLocalStorage } from "../lib/localStorage";
 
 export default function TaskList() {
   const [tasks, setTasks] = useState<Task[]>(getTasks());
@@ -24,14 +23,18 @@ export default function TaskList() {
     setShowCategoryDialog(true);
   };
 
-  const handleCreateNewTask = async (title, description, category?) => {
+  const handleCreateNewTask = (
+    title: string,
+    description: string,
+    category?: Category,
+  ) => {
     const newTask = new Task(title, description, new Date(), category);
     const createdTask = postTask(newTask);
     setTasks([createdTask, ...tasks]);
     setShowTaskDialog(false);
   };
 
-  const handleEditCategory = async (title, color) => {
+  const handleEditCategory = (title: string, color: string) => {
     if (categoryToEdit) {
       categoryToEdit.name = title;
       categoryToEdit.color = color;
@@ -57,7 +60,7 @@ export default function TaskList() {
     setShowCategoryDialog(false);
   };
 
-  const handleDeleteCategory = async (category: Category) => {
+  const handleDeleteCategory = (category: Category) => {
     deleteCategory(category.id);
     setCategories(categories.filter((c) => c.id !== category.id));
     tasks.forEach((task) => {
@@ -105,7 +108,7 @@ export default function TaskList() {
       {Object.entries(groupedTasks).map(
         ([date, tasksForDate]: [string, Task[]]) => (
           <Fragment key={date}>
-            <div className="mt-4">{date}</div>
+            <div className="mt-4 ">{date}</div>
             {tasksForDate.map((task) => (
               <TaskCard
                 key={task.id}
@@ -151,7 +154,6 @@ function TaskManagerControls({ onTaskDialogOpen, onCategoryDialogOpen }) {
       >
         Create Category
       </Button>
-      <Button onClick={clearLocalStorage}>Clear Storage</Button>
     </div>
   );
 }
