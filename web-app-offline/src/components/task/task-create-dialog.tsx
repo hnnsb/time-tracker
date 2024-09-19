@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Category } from "../../lib/model/category";
 
 interface TaskDialogProps {
@@ -15,6 +15,14 @@ export default function TaskCreateDialog({
   const [newTaskTitle, setNewTaskTitle] = useState("New Task");
   const [newTaskDescription, setNewTaskDescription] = useState("");
   const [newTaskCategory, setNewTaskCategory] = useState("");
+  const titleInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (titleInputRef.current) {
+      titleInputRef.current.focus();
+      titleInputRef.current.select();
+    }
+  }, []);
 
   return (
     <div className="absolute top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-gray-500 bg-opacity-50">
@@ -24,6 +32,7 @@ export default function TaskCreateDialog({
       >
         <h2 className="text-lg">Create New Task</h2>
         <input
+          ref={titleInputRef}
           type="text"
           placeholder="Title"
           value={newTaskTitle}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 interface CategoryDialogProps {
   onClose: () => void;
@@ -15,13 +15,21 @@ export default function CategoryCreateDialog({
 }: Readonly<CategoryDialogProps>) {
   const [categoryName, setCategoryName] = useState(name || "New Category");
   const [categoryColor, setCategoryColor] = useState(color || "#FFFFFF");
+  const titleInputRef = useRef<HTMLInputElement>(null);
 
+  useEffect(() => {
+    if (titleInputRef.current) {
+      titleInputRef.current.focus();
+      titleInputRef.current.select();
+    }
+  }, []);
   return (
     <div className="absolute top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-gray-500 bg-opacity-50">
       <div className="p-4 rounded bg-gray-100 dark:bg-gray-800 text-light-text dark:text-dark-text">
         <h2 className="text-lg">Create New Category</h2>
         <label htmlFor={"categoryName"}>Name</label>
         <input
+          ref={titleInputRef}
           type="text"
           placeholder="Title"
           value={categoryName}
