@@ -1,7 +1,8 @@
 {
-  "name": "web-app-offline",
+  "name": "time-tracker-offline",
   "version": "0.1.0",
   "private": true,
+  "author": "hnns_b",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
