@@ -1,5 +1,5 @@
 {
-  "name": "time-tracker-offline",
+  "name": "time-tracker",
   "description": "Track you tasks and categorize them.",
   "version": "0.1.2",
   "private": true,
@@ -18,7 +18,7 @@
   },
   "build": {
     "extends": null,
-    "appId": "de.hnnsb.time-tracker-offline",
+    "appId": "de.hnnsb.time-tracker",
     "files": [
       "dist/**/*",
       "build/**/*",
