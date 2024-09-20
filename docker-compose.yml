@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  web:
+    container_name: "time-tracker-offline"
+    build:
+      context: ./web-app-offline
+      dockerfile: Dockerfile
+    ports:
+      - "9020:80"
+    restart: always

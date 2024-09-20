@@ -1,7 +1,0 @@
-services:
-  frontend:
-    build:
-      context: .
-      dockerfile: Dockerfile.bak
-    ports:
-      - "3000:3000"
