@@ -17,20 +17,21 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
         run: |
-          docker login -u $username -p $password
+          echo $password | docker login -u $username --password-stdin
 
       - name: Extract version
         id: extract-version
         run: |
           VERSION=$(jq -r '.version' < web-app-offline/package.json)
           echo "VERSION=$VERSION" >> $GITHUB_ENV    
+          echo env.VERSION
 
       - name: Build Docker Image
         id: build-image
         run: |
-          ls -la
-          docker build . --file web-app-offline/Dockerfile --tag ${{ secrets.DOCKERHUB_USERNAME }}/web-app-offline:${{ env.VERSION }}
+          ls -la /web-app-offline
+          docker build web-app-offline --tag ${{ secrets.DOCKERHUB_USERNAME }}/time-tracker-offline:${{ env.VERSION }}
 
       - name: Push Docker Image
         id: push-image
-        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/web-app-offline:${{ env.VERSION }}
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/time-tracker-offline:${{ env.VERSION }}
