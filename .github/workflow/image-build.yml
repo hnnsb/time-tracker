@@ -1,0 +1,37 @@
+name: Build Docker Image
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: login to docker hub
+        id: login-docker-hub
+        env:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+        run: |
+          docker login -u $username -p $password
+
+      - name: Extract version
+        id: extract-version
+        run: |
+          VERSION=$(jq -r '.version' < web-app-offline/package.json)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV    
+
+      - name: Build Docker Image
+        id: build-image
+        run: |
+          ls -la
+          docker build . -f web-app-offline/Dockerfile ${{ secrets.DOCKERHUB_USERNAME }}/web-app-offline:${{ env.VERSION }}
+
+      - name: Push Docker Image
+        id: push-image
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/web-app-offline:${{ env.VERSION }}
