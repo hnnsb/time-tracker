@@ -32,7 +32,7 @@ jobs:
         id: build-image
         run: |
           ls -la ./web-app-offline
-          docker build web-app-offline -t ${{ env.username }}/${{ env.repo }:${{ env.VERSION }} -t ${{ env.username }}/${{ env.repo }}:latest
+          docker build web-app-offline -t ${{ env.username }}/${{ env.repo }}:${{ env.VERSION }} -t ${{ env.username }}/${{ env.repo }}:latest
 
       - name: Push Docker Image
         id: push-image
