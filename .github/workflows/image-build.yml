@@ -29,7 +29,7 @@ jobs:
       - name: Build Docker Image
         id: build-image
         run: |
-          ls -la /web-app-offline
+          ls -la ./web-app-offline
           docker build web-app-offline --tag ${{ secrets.DOCKERHUB_USERNAME }}/time-tracker-offline:${{ env.VERSION }}
 
       - name: Push Docker Image
