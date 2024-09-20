@@ -1,13 +1,32 @@
 {
   "name": "time-tracker-offline",
+  "description": "Track you tasks and categorize them.",
   "version": "0.1.2",
   "private": true,
   "author": "hnns_b",
+  "main": "public/main.js",
+  "homepage": "./",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "electron:serve": "concurrently -k \"cross-env BROWSER=none npm start\" \"npm run electron:start\"",
+    "electron:build": "npm run build && electron-builder -c.extraMetadata.main=build/main.js",
+    "electron:start": "wait-on tcp:3000 && electron ."
+  },
+  "build": {
+    "extends": null,
+    "appId": "de.hnnsb.time-tracker-offline",
+    "files": [
+      "dist/**/*",
+      "build/**/*",
+      "node_modules/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "buildResources": "assets"
+    }
   },
   "eslintConfig": {
     "extends": [
@@ -36,6 +55,9 @@
     "@types/react": "^18.3.8",
     "@types/react-dom": "^18.3.0",
     "bootstrap": "^5.3.3",
+    "concurrently": "^9.0.1",
+    "cross-env": "^7.0.3",
+    "electron-is-dev": "^3.0.1",
     "react": "^18.3.1",
     "react-bootstrap": "^2.10.4",
     "react-dom": "^18.3.1",
@@ -45,10 +67,13 @@
     "tailwind": "^4.0.0",
     "typescript": "^4.9.5",
     "uuid": "^10.0.0",
+    "wait-on": "^8.0.1",
     "web-vitals": "^2.1.4"
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "electron": "^32.1.2",
+    "electron-builder": "^25.0.5",
     "globals": "^15.9.0",
     "prettier": "^3.3.3",
     "tailwindcss": "^3.4.12"
