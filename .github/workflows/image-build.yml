@@ -8,13 +8,16 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
+      - env:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          repo: time-tracker
+
       - name: Checkout code
         uses: actions/checkout@v4
 
       - name: login to docker hub
         id: login-docker-hub
         env:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
         run: |
           echo $password | docker login -u $username --password-stdin
@@ -30,8 +33,10 @@ jobs:
         id: build-image
         run: |
           ls -la ./web-app-offline
-          docker build web-app-offline --tag ${{ secrets.DOCKERHUB_USERNAME }}/time-tracker-offline:${{ env.VERSION }}
+          docker build web-app-offline --tag ${{ env.username }}/${{ env.repo }}/time-tracker-offline:${{ env.VERSION }} ${{ env.username }}/${{ env.repo }}/time-tracker-offline:latest
 
       - name: Push Docker Image
         id: push-image
-        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/time-tracker-offline:${{ env.VERSION }}
+        run: |
+          docker push ${{ env.username }}/${{ env.repo }}/time-tracker-offline:${{ env.VERSION }}
+          docker push ${{ env.username }}/${{ env.repo }}/time-tracker-offline:latest
