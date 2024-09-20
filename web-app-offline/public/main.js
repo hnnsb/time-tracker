@@ -1,10 +1,6 @@
 const { BrowserWindow, app } = require("electron");
 const { join } = require("path");
 
-// import { app, BrowserWindow } from "electron";
-// import { join } from "path";
-// import isDev from "electron-is-dev";
-
 function createWindow() {
   const win = new BrowserWindow({
     width: 800,
@@ -15,8 +11,8 @@ function createWindow() {
   });
 
   app.isPackaged
-    ? win.loadURL("http://localhost:3000")
-    : win.loadFile(join(__dirname, "../build/index.html"));
+    ? win.loadFile(join(__dirname, "../build/index.html"))
+    : win.loadURL("http://localhost:3000");
 }
 
 app.on("ready", createWindow);
