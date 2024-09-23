@@ -12,9 +12,9 @@ the local storage of the browser.
 
 ## Distribution
 
-With every push to main a new image is pushed to
-the [docker hub](https://hub.docker.com/repository/docker/hnnsb/time-tracker-offline/general).
-You can start the app with, and it will be available on `localhost:<PORT>` with the following commands
+With every release a the artifacts are build and published with it. Alternatively a docker image is built and pushed to 
+[docker hub](https://hub.docker.com/repository/docker/hnnsb/time-tracker/general).
+You can start the app as a docker container, and it will be available on `localhost:<PORT>` with the following commands.
 Choose a port that is not conflicting with any other service on your machine.
 
 ```sh
