@@ -6,7 +6,7 @@ function createWindow() {
     width: 800,
     height: 600,
     webPreferences: {},
-    icon: "favicon.ico",
+    icon: "icon.ico",
     autoHideMenuBar: true,
   });
 
