@@ -45,7 +45,7 @@ jobs:
           docker push ${{ env.username }}/${ env.repo }}:latest
 
   build-electron:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     env:
       APP_TARGET: desktop
     steps:
@@ -61,12 +61,15 @@ jobs:
         run: npm install
 
       - name: Build for Electron
-        run: npm run build:electron  # A custom script for electron build in package.json
+        run: npm run build:electron
 
       - name: Upload Electron Artifact
         uses: actions/upload-artifact@v4
         with:
           name: time-tracker-desktop
-          path: dist/Time-Tracker Setup *.*.*.exe  # Assuming this is the path where the executable is saved
+          path: |
+            dist/Time-Tracker Setup *.*.*.exe
+            dist/Time-Tracker Setup *.*.*.dmg
+            dist/Time-Tracker Setup *.*.*.zip
           if-no-files-found: error
           retention-days: 1
