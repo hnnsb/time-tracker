@@ -38,7 +38,14 @@
     },
     "linux": {
       "target": "AppImage"
-    }
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "hnnsb",
+        "repo": "time-tracker"
+      }
+    ]
   },
   "eslintConfig": {
     "extends": [
