@@ -14,6 +14,7 @@
     "clean": "rm -rf build dist",
     "electron:serve": "concurrently -k \"cross-env BROWSER=none npm start\" \"npm run electron:start\"",
     "electron:build": "npm run build && electron-builder -c.extraMetadata.main=build/main.js",
+    "electron:build-pipeline": "npm run build && electron-builder -c.extraMetadata.main=build/main.js --win --mac --linux",
     "electron:start": "wait-on tcp:3000 && electron ."
   },
   "build": {

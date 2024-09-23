@@ -62,7 +62,7 @@ jobs:
         working-directory: ./web-app
 
       - name: Build for Electron
-        run: npm run electron:build
+        run: npm run electron:build-pipeline
         working-directory: ./web-app
 
       - name: List artifacts
@@ -73,8 +73,8 @@ jobs:
         with:
           name: time-tracker-desktop
           path: |
-            web-app/dist/Time-Tracker Setup *.exe
-            web-app/dist/Time-Tracker Setup *.dmg
-            web-app/dist/Time-Tracker Setup *.zip
+            web-app/dist/Time-Tracker*.exe
+            web-app/dist/Time-Tracker*.dmg
+            web-app/dist/Time-Tracker*.zip
           if-no-files-found: warn
           retention-days: 1
