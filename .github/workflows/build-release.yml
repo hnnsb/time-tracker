@@ -41,8 +41,8 @@ jobs:
       - name: Push Docker Image
         id: push-image
         run: |
-          docker push ${{ env.username }}/${ env.repo }}:${{ env.VERSION }}
-          docker push ${{ env.username }}/${ env.repo }}:latest
+          docker push ${{ env.username }}/${{ env.repo }}:${{ env.VERSION }}
+          docker push ${{ env.username }}/${{ env.repo }}:latest
 
   build-electron:
     runs-on: macos-latest
@@ -65,14 +65,16 @@ jobs:
         run: npm run electron:build
         working-directory: ./web-app
 
+      - name: List artifacts
+        run: ls -la ./web-app/dist
 
       - name: Upload Electron Artifact
         uses: actions/upload-artifact@v4
         with:
           name: time-tracker-desktop
           path: |
-            dist/Time-Tracker Setup *.*.*.exe
-            dist/Time-Tracker Setup *.*.*.dmg
-            dist/Time-Tracker Setup *.*.*.zip
+            web-app/dist/Time-Tracker Setup *.exe
+            web-app/dist/Time-Tracker Setup *.dmg
+            web-app/dist/Time-Tracker Setup *.zip
           if-no-files-found: warn
           retention-days: 1
