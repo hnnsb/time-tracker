@@ -18,7 +18,8 @@
   },
   "build": {
     "extends": null,
-    "appId": "de.hnnsb.time-tracker",
+    "appId": "de.hnnsb.time-tracker.desktop",
+    "productName": "Time-Tracker",
     "files": [
       "dist/**/*",
       "build/**/*",
@@ -27,6 +28,15 @@
     ],
     "directories": {
       "buildResources": "assets"
+    },
+    "mac": {
+      "target": "dmg"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "linux": {
+      "target": "AppImage"
     }
   },
   "eslintConfig": {
