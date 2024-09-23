@@ -49,6 +49,9 @@ jobs:
     env:
       APP_TARGET: desktop
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    permissions:
+      contents: write
+      packages: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4

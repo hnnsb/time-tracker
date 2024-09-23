@@ -1,7 +1,7 @@
 {
   "name": "time-tracker",
   "description": "Track you tasks and categorize them.",
-  "version": "0.1.2",
+  "version": "0.1.2-rc2",
   "private": true,
   "author": "hnns_b",
   "main": "public/main.js",
