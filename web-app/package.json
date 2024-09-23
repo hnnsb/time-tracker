@@ -14,7 +14,7 @@
     "clean": "rm -rf build dist",
     "electron:serve": "concurrently -k \"cross-env BROWSER=none npm start\" \"npm run electron:start\"",
     "electron:build": "npm run build && electron-builder -c.extraMetadata.main=build/main.js",
-    "electron:build-pipeline": "npm run build && electron-builder -c.extraMetadata.main=build/main.js --win --mac --linux",
+    "electron:build-pipeline": "npm run build && electron-builder -c.extraMetadata.main=build/main.js --win --mac --linux --arm64 --x64",
     "electron:start": "wait-on tcp:3000 && electron ."
   },
   "build": {
@@ -34,18 +34,10 @@
       "target": "dmg"
     },
     "win": {
-      "target": "nsis",
-      "arch": [
-        "x64",
-        "ia32"
-      ]
+      "target": "nsis"
     },
     "linux": {
-      "target": "AppImage",
-      "arch": [
-        "x64",
-        "arm64"
-      ]
+      "target": "AppImage"
     }
   },
   "eslintConfig": {
