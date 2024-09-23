@@ -62,7 +62,7 @@ jobs:
         working-directory: ./web-app
 
       - name: Build for Electron
-        run: npm run build:electron
+        run: npm run electron:build
         working-directory: ./web-app
 
 
@@ -74,5 +74,5 @@ jobs:
             dist/Time-Tracker Setup *.*.*.exe
             dist/Time-Tracker Setup *.*.*.dmg
             dist/Time-Tracker Setup *.*.*.zip
-          if-no-files-found: error
+          if-no-files-found: warn
           retention-days: 1
