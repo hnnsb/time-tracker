@@ -34,10 +34,18 @@
       "target": "dmg"
     },
     "win": {
-      "target": "nsis"
+      "target": "nsis",
+      "arch": [
+        "x64",
+        "ia32"
+      ]
     },
     "linux": {
-      "target": "AppImage"
+      "target": "AppImage",
+      "arch": [
+        "x64",
+        "arm64"
+      ]
     }
   },
   "eslintConfig": {
