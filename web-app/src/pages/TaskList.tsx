@@ -1,5 +1,4 @@
 import { Fragment, useState } from "react";
-import { Button } from "react-bootstrap";
 import { Task } from "../lib/model/task";
 import { Category } from "../lib/model/category";
 import { deleteTask, getTasks, postTask, putTask } from "../api/tasks";
@@ -8,6 +7,7 @@ import TaskCreateDialog from "../components/task/task-create-dialog";
 import CategoryCreateDialog from "../components/category/category-create-dialog";
 import CategoryDropdown from "../components/category/category-dropdown";
 import TaskCard from "../components/task/task-card";
+import PButton from "../components/PButton";
 
 export default function TaskList() {
   const [tasks, setTasks] = useState<Task[]>(getTasks());
@@ -138,22 +138,12 @@ export default function TaskList() {
 function TaskManagerControls({ onTaskDialogOpen, onCategoryDialogOpen }) {
   return (
     <div>
-      <Button
-        className={
-          "m-1 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-opacity-50"
-        }
-        onClick={onTaskDialogOpen}
-      >
+      <PButton className={"mr-2"} onClick={onTaskDialogOpen}>
         Create Task
-      </Button>
-      <Button
-        className={
-          "m-1 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-opacity-50"
-        }
-        onClick={onCategoryDialogOpen}
-      >
+      </PButton>
+      <PButton className={"mr-2"} onClick={onCategoryDialogOpen}>
         Create Category
-      </Button>
+      </PButton>
     </div>
   );
 }
