@@ -25,16 +25,16 @@ jobs:
         run: |
           echo $password | docker login -u $username --password-stdin
 
-      - name: Get Version
-        id: get-version
-        uses: jannemattila/get-version-from-tag@v3
+      - name: Extract version
+        id: extract-version
+        run: |
+          VERSION=$(jq -r '.version' < web-app-offline/package.json)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV    
+          echo env.VERSION
 
       - name: Build Docker Image
         id: build-image
         run: |
-          VERSION=$(echo "${{ steps.get-version.outputs.version }}")
-          echo "VERSION=$VERSION" >> $GITHUB_ENV    
-          echo env.VERSION
           ls -la ./web-app-offline
           docker build web-app -t ${{ env.username }}/${{ env.repo }}:${{ env.VERSION }} -t ${{ env.username }}/${{ env.repo }}:latest
 
