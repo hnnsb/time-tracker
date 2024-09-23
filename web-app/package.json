@@ -43,7 +43,8 @@
       {
         "provider": "github",
         "owner": "hnnsb",
-        "repo": "time-tracker"
+        "repo": "time-tracker",
+        "releaseType": "pre-release"
       }
     ]
   },
