@@ -24,14 +24,14 @@ jobs:
       - name: Extract version
         id: extract-version
         run: |
-          VERSION=$(jq -r '.version' < web-app-offline/package.json)
+          VERSION=$(jq -r '.version' < web-app/package.json)
           echo "VERSION=$VERSION" >> $GITHUB_ENV    
           echo env.VERSION
 
       - name: Build Docker Image
         id: build-image
         run: |
-          ls -la ./web-app-offline
+          ls -la ./web-app
           docker build web-app -t ${{ env.username }}/${{ env.repo }}:${{ env.VERSION }} -t ${{ env.username }}/${{ env.repo }}:latest
 
       - name: Push Docker Image
