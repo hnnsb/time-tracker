@@ -3,7 +3,7 @@
   "description": "Track you tasks and categorize them.",
   "version": "0.1.2-rc2",
   "private": true,
-  "author": "hnns_b",
+  "author": "hnnsb",
   "main": "public/main.js",
   "homepage": "./",
   "scripts": {

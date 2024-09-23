@@ -47,7 +47,6 @@ jobs:
   build-electron:
     runs-on: macos-latest
     env:
-      APP_TARGET: desktop
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     permissions:
       contents: write

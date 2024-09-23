@@ -3,7 +3,7 @@ version: '3.8'
 services:
   web:
     environment:
-      APP_TARGET: browser
+      APP_TARGET: web
     container_name: "time-tracker-web"
     build:
       context: web-app
