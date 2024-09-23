@@ -1,0 +1,75 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-web:
+    name: Build Web
+    runs-on: ubuntu-latest
+    env:
+      APP_TARGET: browser
+      username: ${{ secrets.DOCKERHUB_USERNAME }}
+      repo: time-tracker
+    steps:
+      - name: Checkout code
+        id: checkout-code
+        uses: actions/checkout@v4
+
+      - name: Login to Docker-Hub
+        id: login-docker-hub
+        env:
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+        run: |
+          echo $password | docker login -u $username --password-stdin
+
+      - name: Get Version
+        id: get-version
+        uses: jannemattila/get-version-from-tag@v3
+
+      - name: Build Docker Image
+        id: build-image
+        run: |
+          VERSION=$(echo "${{ steps.get-version.outputs.version }}")
+          echo "VERSION=$VERSION" >> $GITHUB_ENV    
+          echo env.VERSION
+          ls -la ./web-app-offline
+          docker build web-app -t ${{ env.username }}/${{ env.repo }}:${{ env.VERSION }} -t ${{ env.username }}/${{ env.repo }}:latest
+
+      - name: Push Docker Image
+        id: push-image
+        run: |
+          docker push ${{ env.username }}/${ env.repo }}:${{ env.VERSION }}
+          docker push ${{ env.username }}/${ env.repo }}:latest
+
+  build-electron:
+    runs-on: macos-latest
+    env:
+      APP_TARGET: desktop
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build for Electron
+        run: npm run build:electron
+
+      - name: Upload Electron Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: time-tracker-desktop
+          path: |
+            dist/Time-Tracker Setup *.*.*.exe
+            dist/Time-Tracker Setup *.*.*.dmg
+            dist/Time-Tracker Setup *.*.*.zip
+          if-no-files-found: error
+          retention-days: 1

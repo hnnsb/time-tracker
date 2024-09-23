@@ -2,9 +2,11 @@ version: '3.8'
 
 services:
   web:
-    container_name: "time-tracker-offline"
+    environment:
+      APP_TARGET: browser
+    container_name: "time-tracker-web"
     build:
-      context: ./web-app-offline
+      context: web-app
       dockerfile: Dockerfile
     ports:
       - "9020:80"
