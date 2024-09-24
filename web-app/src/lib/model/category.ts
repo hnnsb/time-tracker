@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 
 export class Category {
-  id: string | undefined;
+  id: string;
   name: string;
   color: string;
 
@@ -9,5 +9,10 @@ export class Category {
     this.id = uuidv4();
     this.name = name;
     this.color = color;
+  }
+
+  static fromJSON(json: any): Category {
+    const category = Object.create(Category.prototype);
+    return Object.assign(category, json);
   }
 }

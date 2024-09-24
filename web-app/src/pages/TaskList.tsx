@@ -23,11 +23,7 @@ export default function TaskList() {
     setShowCategoryDialog(true);
   };
 
-  const handleCreateNewTask = (
-    title: string,
-    description: string,
-    category?: Category,
-  ) => {
+  const handleCreateNewTask = (title: string, description: string, category?: Category) => {
     const newTask = new Task(title, description, new Date(), category);
     const createdTask = postTask(newTask);
     setTasks([createdTask, ...tasks]);
@@ -41,8 +37,8 @@ export default function TaskList() {
       const updatedCategory = putCategory(categoryToEdit);
       setCategories(
         categories.map((category) =>
-          category.id === updatedCategory.id ? updatedCategory : category,
-        ),
+          category.id === updatedCategory.id ? updatedCategory : category
+        )
       );
 
       const updatedTasks = tasks.map((task) => {
@@ -65,7 +61,7 @@ export default function TaskList() {
     setCategories(categories.filter((c) => c.id !== category.id));
     tasks.forEach((task) => {
       if (task.category?.id === category.id) {
-        task.category = null;
+        task.category = undefined;
       }
     });
   };
@@ -105,32 +101,26 @@ export default function TaskList() {
           onDelete={handleDeleteCategory}
         />
       </div>
-      {Object.entries(groupedTasks).map(
-        ([date, tasksForDate]: [string, Task[]]) => (
-          <Fragment key={date}>
-            <div className="mt-4 ">{date}</div>
-            {tasksForDate.map((task) => (
-              <TaskCard
-                key={task.id}
-                task={task}
-                categories={categories}
-                onDelete={() => {
-                  deleteTask(task.id);
-                  setTasks(tasks.filter((t) => t.id !== task.id));
-                }}
-                onUpdate={() => {
-                  const updatedTask = putTask(task);
-                  setTasks(
-                    tasks.map((t) =>
-                      t.id === updatedTask.id ? updatedTask : t,
-                    ),
-                  );
-                }}
-              />
-            ))}
-          </Fragment>
-        ),
-      )}
+      {Object.entries(groupedTasks).map(([date, tasksForDate]: [string, Task[]]) => (
+        <Fragment key={date}>
+          <div className="mt-4 ">{date}</div>
+          {tasksForDate.map((task) => (
+            <TaskCard
+              key={task.id}
+              task={task}
+              categories={categories}
+              onDelete={() => {
+                deleteTask(task.id);
+                setTasks(tasks.filter((other) => other.id !== task.id));
+              }}
+              onUpdate={() => {
+                const updatedTask = putTask(task);
+                setTasks(tasks.map((other) => (other.id === updatedTask.id ? updatedTask : other)));
+              }}
+            />
+          ))}
+        </Fragment>
+      ))}
     </div>
   );
 }
