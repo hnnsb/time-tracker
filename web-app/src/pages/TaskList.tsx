@@ -58,7 +58,7 @@ export default function TaskList() {
 
   const handleDeleteCategory = (category: Category) => {
     deleteCategory(category.id);
-    setCategories(categories.filter((c) => c.id !== category.id));
+    setCategories(categories.filter((other) => category.id !== other.id));
     tasks.forEach((task) => {
       if (task.category?.id === category.id) {
         task.category = undefined;
@@ -66,12 +66,14 @@ export default function TaskList() {
     });
   };
 
-  const groupedTasks = tasks.reduce((acc: Object, task: Task) => {
+  const groupedTasks = tasks.reduce((acc, task) => {
     const date = new Date(task.startTime).toDateString();
-    if (!acc[date]) acc[date] = [];
+    if (!acc[date]) {
+      acc[date] = [];
+    }
     acc[date].push(task);
     return acc;
-  }, {});
+  }, new Map<string, Task[]>());
 
   return (
     <div>
@@ -111,11 +113,11 @@ export default function TaskList() {
               categories={categories}
               onDelete={() => {
                 deleteTask(task.id);
-                setTasks(tasks.filter((other) => other.id !== task.id));
+                setTasks(tasks.filter((other) => task.id !== other.id));
               }}
               onUpdate={() => {
                 const updatedTask = putTask(task);
-                setTasks(tasks.map((other) => (other.id === updatedTask.id ? updatedTask : other)));
+                setTasks(tasks.map((other) => (updatedTask.id === other.id ? updatedTask : other)));
               }}
             />
           ))}

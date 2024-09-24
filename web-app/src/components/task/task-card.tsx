@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { FaPause, FaPen, FaPlay, FaSave, FaStop, FaTimes, FaTrash } from "react-icons/fa";
 import { Task } from "../../lib/model/task";
 import { Category } from "../../lib/model/category";
@@ -7,8 +7,8 @@ import { timeAsString } from "../../lib/utils";
 interface TaskCardProps {
   task: Task;
   categories: Category[];
-  onDelete: any;
-  onUpdate: any;
+  onDelete: (taskId: string) => void;
+  onUpdate: (task: Task) => void;
 }
 
 export default function TaskCard({
@@ -17,34 +17,18 @@ export default function TaskCard({
   onDelete,
   onUpdate,
 }: Readonly<TaskCardProps>) {
-  const [formattedTime, setFormattedTime] = useState<string>(
-    task.endTime !== undefined
-      ? timeAsString(
-          new Date(task.endTime).getTime() - new Date(task.startTime).getTime() - task.pauseTime
-        )
-      : timeAsString(new Date().getTime() - new Date(task.startTime).getTime() - task.pauseTime)
-  );
-  const [isRunning, setIsRunning] = useState<boolean>(
-    task.endTime === undefined && task.pauseStart === undefined
-  );
+  const getTaskTime = useCallback(() => task.getDuration(), [task]);
+  const { formattedTime, startTimer, stopTimer } = useTaskTimer({
+    start: true,
+    getTime: getTaskTime,
+  });
   const [editMode, setEditMode] = useState<boolean>(false);
   const [editedTitle, setEditedTitle] = useState<string>(task.name);
   const [editedDescription, setEditedDescription] = useState<string>(task.description);
 
-  useEffect(() => {
-    let interval;
-    if (isRunning && !task.pauseStart) {
-      interval = setInterval(() => {
-        const duration = task.getDuration();
-        setFormattedTime(timeAsString(duration));
-      }, 1000);
-    }
-    return () => clearInterval(interval);
-  }, [isRunning, task.pauseTime, task.pauseStart]);
-
   const handleStop = () => {
-    task.endTime = new Date();
-    setIsRunning(false);
+    task.stop();
+    stopTimer();
     onUpdate(task);
   };
 
@@ -52,26 +36,19 @@ export default function TaskCard({
     onDelete(task.id);
   };
 
-  const handlePause = () => {
-    const now = new Date();
-    if (task.pauseStart) {
-      if (task.pauseTime === undefined) {
-        task.pauseTime = 0;
-      }
-      // Resuming from pause
-      task.pauseTime += now.getTime() - new Date(task.pauseStart).getTime();
-      task.pauseStart = undefined;
-      console.debug("Resuming from pause", task.pauseTime, task.pauseStart, isRunning);
+  const toggleTaskState = () => {
+    if (task.isPaused()) {
+      task.unpause();
+      startTimer();
     } else {
-      // Pausing
-      task.pauseStart = now;
-      console.debug("Pausing", task.pauseTime, new Date(task.pauseStart), isRunning);
+      task.pause();
+      stopTimer();
     }
-    setIsRunning(!isRunning);
     onUpdate(task);
   };
 
-  const handleSave = () => {
+  const handleSave = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     task.name = editedTitle;
     task.description = editedDescription;
     onUpdate(task);
@@ -84,8 +61,11 @@ export default function TaskCard({
     setEditMode(false);
   };
 
-  const handelChangeCategory = (selectedId: string) => {
-    task.category = categories.filter((c) => c.id === selectedId)[0];
+  const handleChangeCategory = (selectedId: string) => {
+    const selectedCategory = categories.find((category) => category.id === selectedId);
+    if (selectedCategory) {
+      task.category = selectedCategory;
+    }
   };
 
   return (
@@ -97,12 +77,13 @@ export default function TaskCard({
     >
       {editMode ? (
         <>
-          <form onSubmit={handleSave}>
+          <form id="edit-task-form" onSubmit={handleSave}>
             <div className="flex flex-row justify-between">
               <div className="flex flex-col justify-between">
                 <div className="m-auto">
                   <button
-                    onClick={handleSave}
+                    type="submit"
+                    form="edit-task-form"
                     title="Save Task Title and Description"
                     className="p-2 bg-green-500 text-white rounded"
                   >
@@ -150,9 +131,9 @@ export default function TaskCard({
                   <select
                     className="px-2 py-1 border rounded"
                     value={task.category?.id}
-                    onChange={(e) => handelChangeCategory(e.target.value)}
+                    onChange={(e) => handleChangeCategory(e.target.value)}
                   >
-                    <option value={null}>Select Category</option>
+                    <option value="">Select Category</option>
                     {categories.map((category) => (
                       <option value={category.id} key={category.id}>
                         {category.name}
@@ -189,23 +170,23 @@ export default function TaskCard({
             <div className="ml-2">
               <p
                 className={`text-sm font-semibold`}
-                style={{ color: task.category ? task.category.color : "gray" }}
+                style={{ color: task.category?.color || "gray" }}
               >
-                {task.category ? task.category.name : "No Category"}
+                {task.category?.name || "No Category"}
               </p>
               <p className="text-lg font-semibold">{task.name}</p>
               <p className="text-gray-600 dark:text-gray-400">{task.description}</p>
             </div>
           </div>
           <div className="flex items-center flex-col sm:flex-row">
-            {!task.endTime && (
+            {!task.isStopped() && (
               <>
                 <button
-                  onClick={handlePause}
-                  title={isRunning ? "Pause Task" : "Resume Task"}
+                  onClick={toggleTaskState}
+                  title={task.isPaused() ? "Resume Task" : "Pause Task"}
                   className="p-2 bg-blue-500 text-white rounded"
                 >
-                  {isRunning ? <FaPause /> : <FaPlay />}
+                  {task.isPaused() ? <FaPlay /> : <FaPause />}
                 </button>
                 <button
                   onClick={handleStop}
@@ -217,13 +198,11 @@ export default function TaskCard({
               </>
             )}
             <span
-              className={`text-right font-mono ${isRunning ? "text-red-500" : "dark:text-gray-400 text-gray-600"}`}
+              className={`text-right font-mono ${task.isRunning() ? "text-red-500" : "dark:text-gray-400 text-gray-600"}`}
             >
               <div className="flex align-center whitespace-nowrap">
-                {!isRunning && !task.endTime && (
-                  <FaPause className="inline-block w-2 h-2 mx-2 my-auto" />
-                )}
-                {isRunning && (
+                {task.isPaused() && <FaPause className="inline-block w-2 h-2 mx-2 my-auto" />}
+                {task.isRunning() && (
                   <span className="inline-block w-2 h-2 bg-red-600 rounded-full mx-2 my-auto"></span>
                 )}
                 <span>{formattedTime}</span>
@@ -234,4 +213,42 @@ export default function TaskCard({
       )}
     </div>
   );
+}
+
+interface UseTaskTimerProps {
+  start: boolean;
+  getTime: () => number;
+}
+
+function useTaskTimer({ start, getTime }: UseTaskTimerProps) {
+  const [isRunning, setIsRunning] = useState<boolean>(start);
+  const [formattedTime, setFormattedTime] = useState<string>(timeAsString(getTime()));
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout | undefined;
+
+    if (isRunning) {
+      interval = setInterval(() => {
+        setFormattedTime(timeAsString(getTime()));
+      }, 1000);
+    }
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
+  }, [isRunning, getTime]);
+
+  const startTimer = () => {
+    setIsRunning(true);
+  };
+  const stopTimer = () => {
+    setIsRunning(false);
+  };
+
+  return {
+    formattedTime,
+    startTimer,
+    stopTimer,
+  };
 }
