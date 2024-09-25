@@ -4,10 +4,10 @@ import { getFromLocalStorage, saveToLocalStorage } from "../lib/localStorage";
 const TASKS_KEY = "tasks";
 
 export function getTasks() {
-  const tasks = getFromLocalStorage(TASKS_KEY) || [];
+  let tasks = getFromLocalStorage<Task>(TASKS_KEY) || [];
+  tasks = tasks.map((task: Task) => Task.fromJSON(task));
   return tasks.sort(
-    (a: Task, b: Task) =>
-      new Date(b.startTime).getTime() - new Date(a.startTime).getTime(),
+    (a: Task, b: Task) => new Date(b.startTime).getTime() - new Date(a.startTime).getTime()
   );
 }
 
@@ -19,9 +19,7 @@ export function deleteTask(taskId: string) {
 
 export function putTask(updatedTask: Task) {
   let tasks = getFromLocalStorage(TASKS_KEY) || [];
-  tasks = tasks.map((task: Task) =>
-    task.id === updatedTask.id ? updatedTask : task,
-  );
+  tasks = tasks.map((task: Task) => (task.id === updatedTask.id ? updatedTask : task));
   saveToLocalStorage(TASKS_KEY, tasks);
   return updatedTask;
 }

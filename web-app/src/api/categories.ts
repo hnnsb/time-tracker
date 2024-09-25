@@ -3,25 +3,22 @@ import { getFromLocalStorage, saveToLocalStorage } from "../lib/localStorage";
 
 const CATEGORIES_KEY = "categories";
 
-export function getCategories(email: string): Category[] {
-  const categories: Category[] = getFromLocalStorage(CATEGORIES_KEY) || [];
-  return categories.sort((a: Category, b: Category) =>
-    a.name.localeCompare(b.name),
-  );
+export function getCategories(): Category[] {
+  let categories: Category[] = getFromLocalStorage<Category>(CATEGORIES_KEY);
+  categories = categories.map((category: Category) => Category.fromJSON(category));
+  return categories.sort((a: Category, b: Category) => a.name.localeCompare(b.name));
 }
 
 export function deleteCategory(categoryId: string) {
   let categories: Category[] = getFromLocalStorage(CATEGORIES_KEY) || [];
-  categories = categories.filter(
-    (category: Category) => category.id !== categoryId,
-  );
+  categories = categories.filter((category: Category) => category.id !== categoryId);
   saveToLocalStorage(CATEGORIES_KEY, categories);
 }
 
 export function putCategory(updatedCategory: Category): Category {
   let categories = getFromLocalStorage(CATEGORIES_KEY) || [];
   categories = categories.map((category: Category) =>
-    category.id === updatedCategory.id ? updatedCategory : category,
+    category.id === updatedCategory.id ? updatedCategory : category
   );
   saveToLocalStorage(CATEGORIES_KEY, categories);
   return updatedCategory;

@@ -1,13 +1,10 @@
-import { Category } from "./model/category";
-import { Task } from "./model/task";
-
-export function saveToLocalStorage(key: string, value: Category[] | Task[]) {
+export function saveToLocalStorage<T>(key: string, value: T[]) {
   localStorage.setItem(key, JSON.stringify(value));
 }
 
-export function getFromLocalStorage(key: string) {
+export function getFromLocalStorage<T>(key: string): T[] {
   const data = localStorage.getItem(key);
-  return data ? JSON.parse(data) : null;
+  return data ? JSON.parse(data) : [];
 }
 
 export function removeFromLocalStorage(key: string): void {
