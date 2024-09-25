@@ -1,10 +1,11 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { FaPause, FaPen, FaPlay, FaSave, FaStop, FaTimes, FaTrash } from "react-icons/fa";
 import { Task } from "../../lib/model/task";
 import { Category } from "../../lib/model/category";
-import { timeAsString } from "../../lib/utils";
+import { useTaskTimer } from "./use-task-timer";
 
 interface TaskCardProps {
+  className?: string;
   task: Task;
   categories: Category[];
   onDelete: (taskId: string) => void;
@@ -12,6 +13,7 @@ interface TaskCardProps {
 }
 
 export default function TaskCard({
+  className,
   task,
   categories,
   onDelete,
@@ -70,10 +72,7 @@ export default function TaskCard({
 
   return (
     <div
-      className="flex justify-between items-center mt-2 p-4
-            bg-light-bg_secondary
-            dark:bg-dark-bg_secondary
-            rounded"
+      className={`${className} p-4 flex justify-between items-center bg-light-bg_secondary dark:bg-dark-bg_secondary rounded`}
     >
       {editMode ? (
         <>
@@ -100,7 +99,7 @@ export default function TaskCard({
                   </button>
                 </div>
               </div>
-              <div className="flex flex-col lg:flex-row p-2">
+              <div className="px-3 flex flex-col md:flex-row p-2">
                 <div className="flex flex-col mb-2 mr-2">
                   <label htmlFor="titleInput" className="block text-sm font-medium">
                     Title
@@ -122,6 +121,7 @@ export default function TaskCard({
                     value={editedDescription}
                     onChange={(e) => setEditedDescription(e.target.value)}
                     className="px-2 py-1 border rounded"
+                    maxLength={150}
                   />
                 </div>
                 <div className="flex flex-col mb-2 mr-2">
@@ -166,21 +166,28 @@ export default function TaskCard({
                 <FaPen />
               </button>
             </div>
-
-            <div className="ml-2">
-              <p
-                className={`text-sm font-semibold`}
-                style={{ color: task.category?.color || "gray" }}
-              >
-                {task.category?.name || "No Category"}
-              </p>
-              <p className="text-lg font-semibold">{task.name}</p>
-              <p className="text-gray-600 dark:text-gray-400">{task.description}</p>
+            <div className="px-4">
+              <div>
+                <p
+                  className="mb-2 text-sm font-semibold"
+                  style={{ color: task.category?.color || "gray" }}
+                >
+                  {task.category?.name || "No Category"}
+                </p>
+              </div>
+              <div className="grid grid-cols-3 gap-2">
+                <p className="mb-0 text-lg font-semibold overflow-hidden overflow-ellipsis">
+                  {task.name}
+                </p>
+                <p className="mb-0 col-span-2 text-gray-600 dark:text-gray-400 overflow-hidden overflow-ellipsis">
+                  {task.description}
+                </p>
+              </div>
             </div>
           </div>
-          <div className="flex items-center flex-col sm:flex-row">
+          <div className="flex items-center flex-col lg:flex-row">
             {!task.isStopped() && (
-              <>
+              <div className="flex flex-row">
                 <button
                   onClick={toggleTaskState}
                   title={task.isPaused() ? "Resume Task" : "Pause Task"}
@@ -188,17 +195,18 @@ export default function TaskCard({
                 >
                   {task.isPaused() ? <FaPlay /> : <FaPause />}
                 </button>
+                <span className="p-1"></span>
                 <button
                   onClick={handleStop}
                   title="Stop Task"
-                  className="my-2 sm:my-0 sm:mx-2 p-2 bg-red-500 text-white rounded"
+                  className="p-2 bg-red-500 text-white rounded"
                 >
                   <FaStop />
                 </button>
-              </>
+              </div>
             )}
-            <span
-              className={`text-right font-mono ${task.isRunning() ? "text-red-500" : "dark:text-gray-400 text-gray-600"}`}
+            <div
+              className={`pt-2 text-right font-mono ${task.isRunning() ? "text-red-500" : "dark:text-gray-400 text-gray-600"}`}
             >
               <div className="flex align-center whitespace-nowrap">
                 {task.isPaused() && <FaPause className="inline-block w-2 h-2 mx-2 my-auto" />}
@@ -207,48 +215,10 @@ export default function TaskCard({
                 )}
                 <span>{formattedTime}</span>
               </div>
-            </span>
+            </div>
           </div>
         </>
       )}
     </div>
   );
-}
-
-interface UseTaskTimerProps {
-  start: boolean;
-  getTime: () => number;
-}
-
-function useTaskTimer({ start, getTime }: UseTaskTimerProps) {
-  const [isRunning, setIsRunning] = useState<boolean>(start);
-  const [formattedTime, setFormattedTime] = useState<string>(timeAsString(getTime()));
-
-  useEffect(() => {
-    let interval: NodeJS.Timeout | undefined;
-
-    if (isRunning) {
-      interval = setInterval(() => {
-        setFormattedTime(timeAsString(getTime()));
-      }, 1000);
-    }
-    return () => {
-      if (interval) {
-        clearInterval(interval);
-      }
-    };
-  }, [isRunning, getTime]);
-
-  const startTimer = () => {
-    setIsRunning(true);
-  };
-  const stopTimer = () => {
-    setIsRunning(false);
-  };
-
-  return {
-    formattedTime,
-    startTimer,
-    stopTimer,
-  };
 }

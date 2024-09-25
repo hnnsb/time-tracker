@@ -108,6 +108,7 @@ export default function TaskList() {
           <div className="mt-4 ">{date}</div>
           {tasksForDate.map((task) => (
             <TaskCard
+              className="mt-2"
               key={task.id}
               task={task}
               categories={categories}
