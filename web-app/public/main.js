@@ -2,7 +2,7 @@ const { BrowserWindow, app } = require("electron");
 const { join } = require("path");
 
 function createWindow() {
-  const win = new BrowserWindow({
+  let mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
     webPreferences: {},
@@ -11,8 +11,10 @@ function createWindow() {
   });
 
   app.isPackaged
-    ? win.loadFile(join(__dirname, "../build/index.html"))
-    : win.loadURL("http://localhost:3000");
+    ? mainWindow.loadFile(join(__dirname, "../build/index.html"))
+    : mainWindow.loadURL("http://localhost:3000");
+
+  mainWindow.on("closed", () => (mainWindow = null));
 }
 
 app.on("ready", createWindow);

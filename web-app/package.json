@@ -13,7 +13,9 @@
     "eject": "react-scripts eject",
     "electron:serve": "concurrently -k \"cross-env BROWSER=none npm start\" \"npm run electron:start\"",
     "electron:build": "npm run build && electron-builder -c.extraMetadata.main=build/main.js --win",
-    "electron:build-pipeline": "npm run build && electron-builder -c.extraMetadata.main=build/main.js --win",
+    "electron:build-win": "npm run build && electron-builder -c.extraMetadata.main=build/main.js --win",
+    "electron:build-macos": "npm run build && electron-builder -c.extraMetadata.main=build/main.js --mac",
+    "electron:build-linux": "npm run build && electron-builder -c.extraMetadata.main=build/main.js --linux",
     "electron:start": "wait-on tcp:3000 && electron ."
   },
   "build": {

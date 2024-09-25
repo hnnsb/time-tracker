@@ -44,8 +44,8 @@ jobs:
           docker push ${{ env.username }}/${{ env.repo }}:${{ env.VERSION }}
           docker push ${{ env.username }}/${{ env.repo }}:latest
 
-  build-electron:
-    runs-on: macos-latest
+  build-electron-windows:
+    runs-on: windows-latest
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     permissions:
@@ -65,7 +65,7 @@ jobs:
         working-directory: ./web-app
 
       - name: Build for Electron
-        run: npm run electron:build-pipeline
+        run: npm run electron:build-pipeline-win
         working-directory: ./web-app
 
       - name: List artifacts
@@ -75,9 +75,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: time-tracker-desktop
-          path: |
-            web-app/dist/Time-Tracker*.exe
-            web-app/dist/Time-Tracker*.dmg
-            web-app/dist/Time-Tracker*.zip
+          path: web-app/dist/Time-Tracker*.exe
           if-no-files-found: warn
           retention-days: 1
