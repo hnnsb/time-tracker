@@ -99,7 +99,7 @@ export default function TaskCard({
                   </button>
                 </div>
               </div>
-              <div className="flex flex-col lg:flex-row p-2">
+              <div className="px-3 flex flex-col md:flex-row p-2">
                 <div className="flex flex-col mb-2 mr-2">
                   <label htmlFor="titleInput" className="block text-sm font-medium">
                     Title
@@ -121,6 +121,7 @@ export default function TaskCard({
                     value={editedDescription}
                     onChange={(e) => setEditedDescription(e.target.value)}
                     className="px-2 py-1 border rounded"
+                    maxLength={150}
                   />
                 </div>
                 <div className="flex flex-col mb-2 mr-2">
@@ -175,12 +176,16 @@ export default function TaskCard({
                 </p>
               </div>
               <div className="grid grid-cols-3 gap-2">
-                <p className="text-lg font-semibold">{task.name}</p>
-                <p className="col-span-2 text-gray-600 dark:text-gray-400">{task.description}</p>
+                <p className="mb-0 text-lg font-semibold overflow-hidden overflow-ellipsis">
+                  {task.name}
+                </p>
+                <p className="mb-0 col-span-2 text-gray-600 dark:text-gray-400 overflow-hidden overflow-ellipsis">
+                  {task.description}
+                </p>
               </div>
             </div>
           </div>
-          <div className="flex items-center flex-col md:flex-row">
+          <div className="flex items-center flex-col lg:flex-row">
             {!task.isStopped() && (
               <div className="flex flex-row">
                 <button
