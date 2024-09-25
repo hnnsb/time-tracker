@@ -65,7 +65,7 @@ jobs:
         working-directory: ./web-app
 
       - name: Build for Electron
-        run: npm run electron:build-pipeline-win
+        run: npm run electron:build-win
         working-directory: ./web-app
 
       - name: List artifacts
