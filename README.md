@@ -1,9 +1,6 @@
-# Time Tracker Project
+# Time Tracker
 
-## Description
-
-This project is a time tracker that allows users to track their time spent on different tasks. The user can add, edit,
-and delete tasks
+Track the time you spend on task. Create tasks and categorize them.
 
 ## Build
 
@@ -12,14 +9,14 @@ the local storage of the browser.
 
 ## Distribution
 
-With every release a the artifacts are build and published with it. Alternatively a docker image is built and pushed to 
+With every release the artifacts are build and published with it. Alternatively a docker image is built and pushed to
 [docker hub](https://hub.docker.com/repository/docker/hnnsb/time-tracker/general).
 You can start the app as a docker container, and it will be available on `localhost:<PORT>` with the following commands.
 Choose a port that is not conflicting with any other service on your machine.
 
 ```sh
-docker pull hnnsb/time-tracker-offline:latest
-docker run -p <PORT>:80 hnnsb/time-tracker-offline:latest
+docker pull hnnsb/time-tracker:latest
+docker run -p <PORT>:80 hnnsb/time-tracker:latest
 ```
 
 Ports that are often occupied are:
