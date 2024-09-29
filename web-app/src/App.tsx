@@ -2,7 +2,7 @@ import React from "react";
 import "./App.css";
 import "./index.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { ThemeProvider } from "./components/ThemeContext";
+import { ThemeProvider } from "./components/theme/ThemeContext";
 import AppRouter from "./AppRouter";
 
 export default function App() {
@@ -10,7 +10,7 @@ export default function App() {
 
   return (
     <ThemeProvider>
-      <AppRouter/>
+      <AppRouter />
     </ThemeProvider>
   );
 }

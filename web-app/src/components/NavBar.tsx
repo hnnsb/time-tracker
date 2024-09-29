@@ -1,6 +1,6 @@
 import { Nav } from "react-bootstrap";
 import React from "react";
-import ThemeSwitcher from "./ThemeSwitcher";
+import ThemeSwitcher from "./theme/ThemeSwitcher";
 import SettingsDialog from "./SettingsDialog";
 import { Link } from "react-router-dom";
 import { RoutePaths } from "../AppRouter";

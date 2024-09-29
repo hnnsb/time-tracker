@@ -2,23 +2,23 @@ import { Fragment, useState } from "react";
 import { Task } from "../lib/model/task";
 import { Category } from "../lib/model/category";
 import { deleteTask, getTasks, postTask, putTask } from "../api/tasks";
-import { deleteCategory, postCategory, putCategory } from "../api/categories";
+import { deleteCategory, getCategories, postCategory, putCategory } from "../api/categories";
 import TaskCreateDialog from "../components/task/task-create-dialog";
 import CategoryCreateDialog from "../components/category/category-create-dialog";
 import CategoryDropdown from "../components/category/category-dropdown";
 import TaskCard from "../components/task/task-card";
 import PButton from "../components/PButton";
 
-export default function TaskList() {
+export default function TaskListPage() {
   const [tasks, setTasks] = useState<Task[]>(getTasks());
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [categories, setCategories] = useState<Category[]>(getCategories());
   const [showTaskDialog, setShowTaskDialog] = useState(false);
   const [showCategoryDialog, setShowCategoryDialog] = useState(false);
   const [categoryToEdit, setCategoryToEdit] = useState<Category | null>(null);
 
-  const handleTaskDialogOpen = () => setShowTaskDialog(true);
+  const openTaskDialog = () => setShowTaskDialog(true);
 
-  const handleCategoryDialogOpen = (category: Category) => {
+  const openCategoryDialog = (category: Category) => {
     setCategoryToEdit(category);
     setShowCategoryDialog(true);
   };
@@ -35,11 +35,6 @@ export default function TaskList() {
       categoryToEdit.name = title;
       categoryToEdit.color = color;
       const updatedCategory = putCategory(categoryToEdit);
-      setCategories(
-        categories.map((category) =>
-          category.id === updatedCategory.id ? updatedCategory : category
-        )
-      );
 
       const updatedTasks = tasks.map((task) => {
         if (task.category?.id === updatedCategory.id) {
@@ -47,6 +42,7 @@ export default function TaskList() {
         }
         return task;
       });
+      updatedTasks.forEach((task) => putTask(task));
       setTasks(updatedTasks);
     } else {
       const newCategory = new Category(title, color);
@@ -94,12 +90,12 @@ export default function TaskList() {
       )}
       <div className="flex justify-between">
         <TaskManagerControls
-          onCategoryDialogOpen={() => handleCategoryDialogOpen(null)}
-          onTaskDialogOpen={handleTaskDialogOpen}
+          onCategoryDialogOpen={() => openCategoryDialog(null)}
+          onTaskDialogOpen={openTaskDialog}
         />
         <CategoryDropdown
           categories={categories}
-          onEdit={handleCategoryDialogOpen}
+          onEdit={openCategoryDialog}
           onDelete={handleDeleteCategory}
         />
       </div>
