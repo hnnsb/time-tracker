@@ -6,9 +6,7 @@ const TASKS_KEY = "tasks";
 export function getTasks() {
   let tasks = getFromLocalStorage<Task>(TASKS_KEY) || [];
   tasks = tasks.map((task: Task) => Task.fromJSON(task));
-  return tasks.sort(
-    (a: Task, b: Task) => new Date(b.startTime).getTime() - new Date(a.startTime).getTime()
-  );
+  return tasks;
 }
 
 export function deleteTask(taskId: string) {
@@ -26,7 +24,7 @@ export function putTask(updatedTask: Task) {
 
 export function postTask(newTask: Task) {
   const tasks = getFromLocalStorage(TASKS_KEY) || [];
-  tasks.push(newTask);
+  tasks.unshift(newTask);
   saveToLocalStorage(TASKS_KEY, tasks);
   return newTask;
 }

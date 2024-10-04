@@ -3,7 +3,7 @@ import { Category } from "../../lib/model/category";
 
 interface TaskDialogProps {
   onClose: () => void;
-  onCreate: (title: string, description: string, category?: Category) => void;
+  onCreate: (title: string, description: string, startTask: boolean, category?: Category) => void;
   categories: Category[];
 }
 
@@ -15,6 +15,7 @@ export default function TaskCreateDialog({
   const [newTaskTitle, setNewTaskTitle] = useState("New Task");
   const [newTaskDescription, setNewTaskDescription] = useState("");
   const [newTaskCategory, setNewTaskCategory] = useState("");
+  const [startTask, setStartTask] = useState(false);
   const titleInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -62,19 +63,25 @@ export default function TaskCreateDialog({
             onCreate(
               newTaskTitle,
               newTaskDescription,
-              categories.filter((c) => c.id === newTaskCategory)[0],
+              startTask,
+              categories.filter((c) => c.id === newTaskCategory)[0]
             )
           }
           className="px-4 py-2 text-white bg-blue-600 rounded mr-2"
         >
           Save
         </button>
-        <button
-          onClick={onClose}
-          className="px-4 py-2 text-white bg-gray-500 rounded"
-        >
+        <button onClick={onClose} className="px-4 py-2 text-white bg-gray-500 rounded mr-2">
           Cancel
         </button>
+        <input
+          id="checkStart"
+          title="Start task on save"
+          type="checkbox"
+          className="mr-1"
+          onChange={() => setStartTask(!startTask)}
+        />
+        <label htmlFor="checkStart">Start Task</label>
       </div>
     </div>
   );

@@ -7,7 +7,7 @@ import TaskCreateDialog from "../components/task/TaskCreateDialog";
 import CategoryCreateDialog from "../components/category/category-create-dialog";
 import CategoryDropdown from "../components/category/category-dropdown";
 import PButton from "../components/PButton";
-import ToDoList from "../components/ToDoList";
+import ToDoList from "../components/task/ToDoList";
 import TaskList from "../components/task/TaskList";
 
 export default function TaskPage() {
@@ -24,8 +24,14 @@ export default function TaskPage() {
     setShowCategoryDialog(true);
   }
 
-  function handleCreateNewTask(title: string, description: string, category?: Category) {
-    const newTask = new Task(title, description, undefined, category);
+  function handleCreateNewTask(
+    title: string,
+    description: string,
+    startTask: boolean,
+    category?: Category
+  ) {
+    let startDate = startTask ? new Date() : undefined;
+    const newTask = new Task(title, description, startDate, category);
     const createdTask = postTask(newTask);
     setTasks([createdTask, ...tasks]);
     setShowTaskDialog(false);
@@ -101,7 +107,7 @@ export default function TaskPage() {
       </div>
       <h3> To Do</h3>
       <ToDoList
-        className="p-2 bg-gray-400 rounded"
+        className="p-2 mb-3 bg-gray-400 rounded"
         tasks={tasks.filter((task) => !task.isStopped())}
         onUpdate={handleUpdateTask}
         onDelete={handleDeleteTask}

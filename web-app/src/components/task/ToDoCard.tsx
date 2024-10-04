@@ -1,8 +1,8 @@
 import { Task } from "../../lib/model/task";
-import { FaPause, FaPlay, FaTrash } from "react-icons/fa";
+import { FaPause, FaPlay, FaRegCircle, FaTrash } from "react-icons/fa";
 import { FaArrowsRotate } from "react-icons/fa6";
-import PButton from "../PButton";
 import React from "react";
+import "./todolist.css";
 
 interface ToDoCardProps {
   className?: string;
@@ -12,30 +12,53 @@ interface ToDoCardProps {
 }
 
 export default function ToDoCard({ className, task, onStart, onDelete }: Readonly<ToDoCardProps>) {
-  return (
-    <div
-      className={`${className} p-2 flex flex-row bg-light-bg_secondary dark:bg-dark-bg_secondary rounded `}
-    >
-      {task.isStarted() ? (
-        <div className="bg-blue-500 rounded-circle p-2 text-white text-xs">
-          {task.isPaused() ? <FaPause /> : <FaArrowsRotate />}
+  const renderStatusIcon = () => {
+    if (task.isPaused()) {
+      return (
+        <div className="bg-blue-500 w-6 h-6 flex text-white text-sm rounded">
+          <FaPause className="m-auto" />
         </div>
-      ) : (
-        <PButton onClick={() => onStart(task)}>
-          <FaPlay />
-        </PButton>
-      )}
-      <div className="grid grid-cols-3">
-        <div>{task.name}</div>
-        <div>{task.description}</div>
+      );
+    } else if (task.isStarted()) {
+      return (
+        <div className="bg-blue-500 w-6 h-6 flex text-white text-sm rounded-circle">
+          <FaArrowsRotate className="m-auto" />
+        </div>
+      );
+    } else {
+      return (
+        <div className="w-6 h-6 flex text-xl rounded-circle">
+          <FaRegCircle className="m-auto" />
+        </div>
+      );
+    }
+  };
+
+  return (
+    <tr className={`${className} table-row bg-light-bg_secondary dark:bg-dark-bg_secondary`}>
+      <td className="table-data w-1/12">
+        <div className="flex justify-center">{renderStatusIcon()}</div>
+      </td>
+      <td className="table-data w-4/12">{task.name}</td>
+      <td className="table-data w-6/12">{task.description}</td>
+      <td className="table-data w-1/12">
+        {!task.isStarted() && (
+          <button
+            className="p-2 bg-blue-500 text-white rounded"
+            title="Start Task"
+            onClick={() => onStart(task)}
+          >
+            <FaPlay />
+          </button>
+        )}
         <button
-          onClick={() => onDelete(task)}
+          className="p-2 bg-red-500 text-white rounded"
           title="Delete Task"
-          className="m-auto p-2 bg-red-500 text-white rounded"
+          onClick={() => onDelete(task)}
         >
           <FaTrash />
         </button>
-      </div>
-    </div>
+      </td>
+    </tr>
   );
 }
