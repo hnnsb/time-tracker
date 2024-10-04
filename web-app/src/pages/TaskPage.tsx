@@ -1,15 +1,16 @@
-import { Fragment, useState } from "react";
+import React, { useState } from "react";
 import { Task } from "../lib/model/task";
 import { Category } from "../lib/model/category";
 import { deleteTask, getTasks, postTask, putTask } from "../api/tasks";
 import { deleteCategory, getCategories, postCategory, putCategory } from "../api/categories";
-import TaskCreateDialog from "../components/task/task-create-dialog";
+import TaskCreateDialog from "../components/task/TaskCreateDialog";
 import CategoryCreateDialog from "../components/category/category-create-dialog";
 import CategoryDropdown from "../components/category/category-dropdown";
-import TaskCard from "../components/task/task-card";
 import PButton from "../components/PButton";
+import ToDoList from "../components/ToDoList";
+import TaskList from "../components/task/TaskList";
 
-export default function TaskListPage() {
+export default function TaskPage() {
   const [tasks, setTasks] = useState<Task[]>(getTasks());
   const [categories, setCategories] = useState<Category[]>(getCategories());
   const [showTaskDialog, setShowTaskDialog] = useState(false);
@@ -18,19 +19,27 @@ export default function TaskListPage() {
 
   const openTaskDialog = () => setShowTaskDialog(true);
 
-  const openCategoryDialog = (category: Category) => {
+  function openCategoryDialog(category: Category) {
     setCategoryToEdit(category);
     setShowCategoryDialog(true);
-  };
+  }
 
-  const handleCreateNewTask = (title: string, description: string, category?: Category) => {
-    const newTask = new Task(title, description, new Date(), category);
+  function handleCreateNewTask(title: string, description: string, category?: Category) {
+    const newTask = new Task(title, description, undefined, category);
     const createdTask = postTask(newTask);
     setTasks([createdTask, ...tasks]);
     setShowTaskDialog(false);
-  };
+  }
+  function handleDeleteTask(task: Task) {
+    deleteTask(task.id);
+    setTasks(tasks.filter((other) => task.id !== other.id));
+  }
 
-  const handleEditCategory = (title: string, color: string) => {
+  function handleUpdateTask(task: Task) {
+    const updatedTask = putTask(task);
+    setTasks(tasks.map((other) => (updatedTask.id === other.id ? updatedTask : other)));
+  }
+  function handleEditCategory(title: string, color: string) {
     if (categoryToEdit) {
       categoryToEdit.name = title;
       categoryToEdit.color = color;
@@ -50,9 +59,9 @@ export default function TaskListPage() {
       setCategories([createdCategory, ...categories]);
     }
     setShowCategoryDialog(false);
-  };
+  }
 
-  const handleDeleteCategory = (category: Category) => {
+  function handleDeleteCategory(category: Category) {
     deleteCategory(category.id);
     setCategories(categories.filter((other) => category.id !== other.id));
     tasks.forEach((task) => {
@@ -60,16 +69,7 @@ export default function TaskListPage() {
         task.category = undefined;
       }
     });
-  };
-
-  const groupedTasks = tasks.reduce((acc, task) => {
-    const date = new Date(task.startTime).toDateString();
-    if (!acc[date]) {
-      acc[date] = [];
-    }
-    acc[date].push(task);
-    return acc;
-  }, new Map<string, Task[]>());
+  }
 
   return (
     <div>
@@ -99,27 +99,21 @@ export default function TaskListPage() {
           onDelete={handleDeleteCategory}
         />
       </div>
-      {Object.entries(groupedTasks).map(([date, tasksForDate]: [string, Task[]]) => (
-        <Fragment key={date}>
-          <div className="mt-4 ">{date}</div>
-          {tasksForDate.map((task) => (
-            <TaskCard
-              className="mt-2"
-              key={task.id}
-              task={task}
-              categories={categories}
-              onDelete={() => {
-                deleteTask(task.id);
-                setTasks(tasks.filter((other) => task.id !== other.id));
-              }}
-              onUpdate={() => {
-                const updatedTask = putTask(task);
-                setTasks(tasks.map((other) => (updatedTask.id === other.id ? updatedTask : other)));
-              }}
-            />
-          ))}
-        </Fragment>
-      ))}
+      <h3> To Do</h3>
+      <ToDoList
+        className="p-2 bg-gray-400 rounded"
+        tasks={tasks.filter((task) => !task.isStopped())}
+        onUpdate={handleUpdateTask}
+        onDelete={handleDeleteTask}
+      />
+      <h3>Progress Track</h3>
+      <TaskList
+        className="p-2 bg-gray-400 rounded"
+        tasks={tasks.filter((task) => task.isStarted())}
+        categories={categories}
+        onUpdate={handleUpdateTask}
+        onDelete={handleDeleteTask}
+      />
     </div>
   );
 }

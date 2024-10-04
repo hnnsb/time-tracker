@@ -1,14 +1,14 @@
 import React, { useCallback, useState } from "react";
-import { FaPause, FaPen, FaPlay, FaSave, FaStop, FaTimes, FaTrash } from "react-icons/fa";
+import { FaCheck, FaPause, FaPen, FaPlay, FaSave, FaTimes, FaTrash } from "react-icons/fa";
 import { Task } from "../../lib/model/task";
 import { Category } from "../../lib/model/category";
-import { useTaskTimer } from "./use-task-timer";
+import { useTaskTimer } from "./useTaskTimer";
 
 interface TaskCardProps {
   className?: string;
   task: Task;
   categories: Category[];
-  onDelete: (taskId: string) => void;
+  onDelete: (task: Task) => void;
   onUpdate: (task: Task) => void;
 }
 
@@ -35,7 +35,7 @@ export default function TaskCard({
   };
 
   const handleDelete = () => {
-    onDelete(task.id);
+    onDelete(task);
   };
 
   const toggleTaskState = () => {
@@ -199,9 +199,9 @@ export default function TaskCard({
                 <button
                   onClick={handleStop}
                   title="Stop Task"
-                  className="p-2 bg-red-500 text-white rounded"
+                  className="p-2 bg-green-500 text-white rounded"
                 >
-                  <FaStop />
+                  <FaCheck />
                 </button>
               </div>
             )}

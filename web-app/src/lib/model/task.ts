@@ -5,13 +5,13 @@ export class Task {
   id: string;
   name: string;
   description: string = "";
-  startTime: Date;
+  startTime: Date | undefined;
   endTime: Date | undefined;
   pauseStart: Date | undefined;
   pauseTime: number = 0;
   category: Category | undefined;
 
-  constructor(name: string, description: string, startTime: Date, category?: Category) {
+  constructor(name: string, description: string, startTime?: Date, category?: Category) {
     this.id = uuidv4();
     this.name = name;
     this.description = description;
@@ -24,7 +24,7 @@ export class Task {
   static fromJSON(json: any): Task {
     const task = Object.create(Task.prototype);
     return Object.assign(task, json, {
-      startTime: new Date(json.startTime),
+      startTime: json.startTime ? new Date(json.startTime) : undefined,
       endTime: json.endTime ? new Date(json.endTime) : undefined,
       pauseStart: json.pauseStart ? new Date(json.pauseStart) : undefined,
       category: json.category ? Category.fromJSON(json.category) : undefined,
@@ -32,6 +32,10 @@ export class Task {
   }
 
   getDuration(): number {
+    if (!this.isStarted()) {
+      return -1;
+    }
+
     if (this.isPaused()) {
       // Calculate correct duration when task is paused.
       return (
@@ -50,6 +54,14 @@ export class Task {
   }
 
   /**
+   * Returns true if the task is started. A started task can be paused.
+   * @returns {boolean}
+   */
+  isStarted(): boolean {
+    return this.startTime !== undefined;
+  }
+
+  /**
    * Returns true if the task is paused. A paused task can be unpaused.
    * @returns {boolean}
    */
@@ -60,6 +72,7 @@ export class Task {
   /**
    * Returns true if the task is stopped. A stopped task cannot be unpaused.
    * A stopped task is not paused.
+   * @returns {boolean}
    */
   isStopped(): boolean {
     return this.endTime !== undefined;
@@ -80,6 +93,14 @@ export class Task {
     this.pauseTime += new Date().getTime() - this.pauseStart.getTime();
     this.pauseStart = undefined;
     console.debug("Resuming from pause", this.pauseTime, this.pauseStart, this.isPaused());
+  }
+
+  start() {
+    if (this.startTime) {
+      throw new Error("Cannot start already started task");
+    }
+    this.startTime = new Date();
+    console.debug("Starting", this.startTime);
   }
 
   pause() {
