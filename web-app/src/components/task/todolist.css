@@ -4,18 +4,23 @@
     font-size: 0.75rem;
     font-weight: 500;
     text-transform: uppercase;
-    color: #6b7280; /* Tailwind's gray-500 */
-    background-color: #f9fafb; /* Tailwind's gray-50 */
-    border-bottom: 1px solid #e5e7eb; /* Tailwind's gray-200 */
+    /*color: #6b7280; !* Tailwind's gray-500 *!*/
+    /*background-color: #f9f9fb; !* Tailwind's gray-50 *!*/
+    /*border-bottom: 1px solid #e5e7eb; !* Tailwind's gray-200 *!*/
 }
 
 .table-row {
     padding: 0.75rem 1.5rem;
-    border-bottom: 1px solid #e5e7eb; /* Tailwind's gray-200 */
 }
 
 .table-data {
     padding: 0.75rem 1.5rem;
-    border-bottom: 1px solid #e5e7eb; /* Tailwind's gray-200 */
     white-space: nowrap;
+}
+
+.table-category-header {
+    padding: 0.1rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 450;
+    text-align: left;
 }

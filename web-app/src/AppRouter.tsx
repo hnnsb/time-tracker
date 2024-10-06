@@ -1,5 +1,4 @@
 import { BrowserRouter, HashRouter, Route, Routes } from "react-router-dom";
-import ChecklistPage from "./pages/ChecklistPage";
 import TaskPage from "./pages/TaskPage";
 import React from "react";
 import NavBar from "./components/NavBar";
@@ -17,7 +16,6 @@ export default function AppRouter() {
       <div className="container dark:text-dark-text pt-3">
         <Routes>
           <Route path={RoutePaths.TASKS} element={<TaskPage />} />
-          <Route path={RoutePaths.CHECKLIST} element={<ChecklistPage />} />
         </Routes>
       </div>
     </Router>

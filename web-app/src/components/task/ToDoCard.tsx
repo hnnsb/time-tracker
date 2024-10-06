@@ -35,7 +35,7 @@ export default function ToDoCard({ className, task, onStart, onDelete }: Readonl
   };
 
   return (
-    <tr className={`${className} table-row bg-light-bg_secondary dark:bg-dark-bg_secondary`}>
+    <tr className={`${className} table-row`}>
       <td className="table-data w-1/12">
         <div className="flex justify-center">{renderStatusIcon()}</div>
       </td>
@@ -44,7 +44,7 @@ export default function ToDoCard({ className, task, onStart, onDelete }: Readonl
       <td className="table-data w-1/12">
         {!task.isStarted() && (
           <button
-            className="p-2 bg-blue-500 text-white rounded"
+            className="p-2 bg-blue-500 text-white rounded mr-1"
             title="Start Task"
             onClick={() => onStart(task)}
           >
