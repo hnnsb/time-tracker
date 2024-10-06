@@ -8,7 +8,7 @@ interface PButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const VARIANT_STYLES = {
-  primary: "bg-blue-600 dark:bg-blue-400 hover:bg-blue-500 text-white",
+  primary: "bg-blue-600 hover:bg-blue-500 text-white",
   secondary: "bg-gray-500 hover:bg-gray-600 text-white",
   danger: "bg-red-500 hover:bg-red-600 text-white",
   success: "bg-green-500 hover:bg-green-600 text-white",
@@ -33,13 +33,7 @@ const PButton: React.FC<PButtonProps> = ({
 };
 
 PButton.propTypes = {
-  variant: PropTypes.oneOf([
-    "primary",
-    "secondary",
-    "danger",
-    "success",
-    "outline",
-  ]),
+  variant: PropTypes.oneOf(["primary", "secondary", "danger", "success", "outline"]),
   className: PropTypes.string,
   children: PropTypes.node.isRequired,
 };

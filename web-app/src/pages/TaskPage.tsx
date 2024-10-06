@@ -107,19 +107,22 @@ export default function TaskPage() {
       </div>
       <h3> To Do</h3>
       <ToDoList
-        className="p-2 mb-3 bg-gray-400 rounded"
+        className="p-2 mb-3"
         tasks={tasks.filter((task) => !task.isStopped())}
         onUpdate={handleUpdateTask}
         onDelete={handleDeleteTask}
       />
       <h3>Progress Track</h3>
       <TaskList
-        className="p-2 bg-gray-400 rounded"
+        className="p-2"
         tasks={tasks.filter((task) => task.isStarted())}
         categories={categories}
         onUpdate={handleUpdateTask}
         onDelete={handleDeleteTask}
       />
+      <p className="text-center text-sm text-gray-500 dark:text-gray-400 m-1">
+        {tasks.filter((task) => task.isStopped()).length} Tasks completed
+      </p>
     </div>
   );
 }
