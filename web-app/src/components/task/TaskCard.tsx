@@ -27,6 +27,7 @@ export default function TaskCard({
   const [editMode, setEditMode] = useState<boolean>(false);
   const [editedTitle, setEditedTitle] = useState<string>(task.name);
   const [editedDescription, setEditedDescription] = useState<string>(task.description);
+  const [editedCategoryId, setEditedCategoryId] = useState<string>(task.category?.id || "");
 
   const handleStop = () => {
     task.stop();
@@ -53,6 +54,7 @@ export default function TaskCard({
     e.preventDefault();
     task.name = editedTitle;
     task.description = editedDescription;
+    task.category = categories.find((category) => category.id === editedCategoryId);
     onUpdate(task);
     setEditMode(false);
   };
@@ -60,14 +62,12 @@ export default function TaskCard({
   const handleCancel = () => {
     setEditedTitle(task.name);
     setEditedDescription(task.description);
+    setEditedCategoryId(task.category?.id || "");
     setEditMode(false);
   };
 
   const handleChangeCategory = (selectedId: string) => {
-    const selectedCategory = categories.find((category) => category.id === selectedId);
-    if (selectedCategory) {
-      task.category = selectedCategory;
-    }
+    setEditedCategoryId(selectedId);
   };
 
   return (
@@ -130,7 +130,7 @@ export default function TaskCard({
                   </label>
                   <select
                     className="px-2 py-1 border rounded"
-                    value={task.category?.id}
+                    value={editedCategoryId}
                     onChange={(e) => handleChangeCategory(e.target.value)}
                   >
                     <option value="">Select Category</option>
