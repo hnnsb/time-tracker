@@ -27,8 +27,6 @@ function createWindow() {
     ? mainWindow.loadFile(join(__dirname, "../build/index.html"))
     : mainWindow.loadURL("http://localhost:3000");
 
-  mainWindow.webContents.openDevTools();
-
   mainWindow.on("closed", () => (mainWindow = null));
   return mainWindow;
 }
