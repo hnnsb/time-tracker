@@ -18,16 +18,15 @@ export default function TaskList({
   onUpdate,
   onDelete,
 }: Readonly<TaskListProps>) {
-  const groupedTasks = tasks
-    .sort((a: Task, b: Task) => new Date(b.startTime).getTime() - new Date(a.startTime).getTime())
-    .reduce((acc, task) => {
-      const date = new Date(task.startTime).toDateString();
-      if (!acc[date]) {
-        acc[date] = [];
-      }
-      acc[date].push(task);
-      return acc;
-    }, new Map<string, Task[]>());
+  tasks.sort((a: Task, b: Task) => b.startTime.getTime() - a.startTime.getTime());
+  const groupedTasks = tasks.reduce((acc, task) => {
+    const date = task.startTime.toDateString();
+    if (!acc[date]) {
+      acc[date] = [];
+    }
+    acc[date].push(task);
+    return acc;
+  }, new Map<string, Task[]>());
 
   return (
     <div className={`${className}`}>

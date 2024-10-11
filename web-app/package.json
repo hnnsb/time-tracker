@@ -1,8 +1,8 @@
 {
   "name": "time-tracker",
-  "description": "Track you tasks and categorize them.",
+  "description": "Track your tasks and categorize them.",
   "version": "0.2.1",
-  "private": true,
+  "private": false,
   "author": "hnnsb",
   "main": "public/main.js",
   "homepage": "./",
