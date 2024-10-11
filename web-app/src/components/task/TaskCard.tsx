@@ -109,7 +109,7 @@ export default function TaskCard({
                     type="text"
                     value={editedTitle}
                     onChange={(e) => setEditedTitle(e.target.value)}
-                    className="px-2 py-1 border rounded"
+                    className="px-2 py-1 border rounded dark:bg-dark-bg_tertiary"
                   />
                 </div>
                 <div className="flex flex-col mb-2 mr-2">
@@ -120,7 +120,7 @@ export default function TaskCard({
                     id="descriptionInput"
                     value={editedDescription}
                     onChange={(e) => setEditedDescription(e.target.value)}
-                    className="px-2 py-1 border rounded"
+                    className="px-2 py-1 border rounded dark:bg-dark-bg_tertiary"
                     maxLength={150}
                   />
                 </div>
@@ -129,7 +129,7 @@ export default function TaskCard({
                     Category
                   </label>
                   <select
-                    className="px-2 py-1 border rounded"
+                    className="px-2 py-1 border rounded dark:bg-dark-bg_tertiary"
                     value={editedCategoryId}
                     onChange={(e) => handleChangeCategory(e.target.value)}
                   >
