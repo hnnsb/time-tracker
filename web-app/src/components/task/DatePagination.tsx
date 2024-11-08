@@ -22,13 +22,22 @@ export default function DatePagination({ tasks, children }: DatePaginationProps)
   return (
     <div>
       <div className={"flex mb-2"}>
-        <PButton className={"rounded-none rounded-l-full border-1"} onClick={() => updateDate(-1)}>
+        <PButton
+          className={"rounded-none rounded-l-full border-1 dark:border-dark-bg_primary"}
+          onClick={() => updateDate(-1)}
+        >
           <FaChevronLeft />
         </PButton>
-        <PButton className={"rounded-none border-1"} onClick={() => setCurrentDate(new Date())}>
+        <PButton
+          className={"rounded-none border-1 dark:border-dark-bg_primary"}
+          onClick={() => setCurrentDate(new Date())}
+        >
           Today
         </PButton>
-        <PButton className={" rounded-none rounded-r-full border-1"} onClick={() => updateDate(1)}>
+        <PButton
+          className={" rounded-none rounded-r-full border-1 dark:border-dark-bg_primary"}
+          onClick={() => updateDate(1)}
+        >
           <FaChevronRight />
         </PButton>
         <div className={"m-auto"}>
