@@ -15,7 +15,7 @@ export default function CategoryDropdown({
   onDelete,
 }: Readonly<CategoryDropdownProps>) {
   return (
-    <DropdownButton className="m-1" id="dropdown-basic" title="Edit Categories">
+    <DropdownButton className="m-1 rounded-full" id="dropdown-basic" title="Edit Categories">
       {categories.map((category) => (
         <Dropdown.Item key={category.id}>
           <CategoryCard
