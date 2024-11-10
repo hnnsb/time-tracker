@@ -1,8 +1,8 @@
-import { Task } from "../../lib/model/task";
+import { Task } from "../../../lib/model/task";
 import React, { Fragment } from "react";
-import TaskCard from "./TaskCard";
-import { Category } from "../../lib/model/category";
-import { DAY_NAMES } from "../../lib/consts/days";
+import TaskCard from "../TaskCard";
+import { Category } from "../../../lib/model/category";
+import { DAY_NAMES } from "../../../lib/consts/days";
 
 interface TaskListProps {
   className?: string;
@@ -12,7 +12,7 @@ interface TaskListProps {
   onDelete: (task: Task) => void;
 }
 
-export default function TaskList({
+export default function TasksByDatesView({
   className,
   tasks,
   categories,

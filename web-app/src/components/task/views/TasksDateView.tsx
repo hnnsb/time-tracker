@@ -1,16 +1,16 @@
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import { ReactNode, useState } from "react";
-import { Task } from "../../lib/model/task";
-import TaskCard from "./TaskCard";
-import PButton from "../PButton";
-import { DAY_NAMES } from "../../lib/consts/days";
+import { useState } from "react";
+import { Task } from "../../../lib/model/task";
+import TaskCard from "../TaskCard";
+import PButton from "../../PButton";
+import { DAY_NAMES } from "../../../lib/consts/days";
 
 interface DatePaginationProps {
   tasks: Task[];
-  children?: ReactNode;
+  className: string;
 }
 
-export default function DatePagination({ tasks, children }: DatePaginationProps) {
+export default function TasksDateView({ tasks, className }: DatePaginationProps) {
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
 
   const updateDate = (diff: number) => {
@@ -20,7 +20,7 @@ export default function DatePagination({ tasks, children }: DatePaginationProps)
   };
 
   return (
-    <div>
+    <div className={className}>
       <div className={"flex mb-2"}>
         <PButton
           className={"rounded-none rounded-l-full border-1 dark:border-dark-bg_primary"}
@@ -56,12 +56,14 @@ export default function DatePagination({ tasks, children }: DatePaginationProps)
         .map((task) => (
           <TaskCard task={task} categories={[]} onDelete={() => ""} onUpdate={() => ""} />
         ))}
-      <div>{children}</div>
     </div>
   );
 }
 
 function sameDay(d1: Date, d2: Date): boolean {
+  if (!d1 || !d2) {
+    return false;
+  }
   return (
     d1.getFullYear() === d2.getFullYear() &&
     d1.getMonth() === d2.getMonth() &&

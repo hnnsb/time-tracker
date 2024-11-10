@@ -8,10 +8,11 @@ import CategoryCreateDialog from "../components/category/category-create-dialog"
 import CategoryDropdown from "../components/category/category-dropdown";
 import PButton from "../components/PButton";
 import ToDoList from "../components/task/ToDoList";
-import TaskList from "../components/task/TaskList";
-import DatePagination from "../components/task/DatePagination";
+import TasksByDatesView from "../components/task/views/TasksByDatesView";
+import TasksPerDayView from "../components/task/views/TasksDateView";
 import ViewSwitcher from "../components/ViewSwitcher";
-import { FaCalendarAlt, FaCalendarDay } from "react-icons/fa";
+import { FaBoxes, FaCalendarAlt, FaCalendarDay } from "react-icons/fa";
+import TasksByCategoryView from "../components/task/views/TasksByCategoryView";
 
 export default function TaskPage() {
   const [tasks, setTasks] = useState<Task[]>(getTasks());
@@ -117,15 +118,22 @@ export default function TaskPage() {
         onUpdate={handleUpdateTask}
         onDelete={handleDeleteTask}
       />
-      <ViewSwitcher title={<h3>Progress Track</h3>} icons={[FaCalendarAlt, FaCalendarDay]}>
-        <TaskList
+      <ViewSwitcher title={<h3>Progress Track</h3>} icons={[FaCalendarAlt, FaCalendarDay, FaBoxes]}>
+        <TasksByDatesView
           className="p-2"
           tasks={tasks.filter((task) => task.isStarted())}
           categories={categories}
           onUpdate={handleUpdateTask}
           onDelete={handleDeleteTask}
         />
-        <DatePagination tasks={tasks}></DatePagination>
+        <TasksPerDayView className="p-2" tasks={tasks}></TasksPerDayView>
+        <TasksByCategoryView
+          className="p-2"
+          tasks={tasks}
+          categories={categories}
+          onDelete={handleDeleteTask}
+          onUpdate={handleUpdateTask}
+        ></TasksByCategoryView>
       </ViewSwitcher>
     </div>
   );

@@ -16,7 +16,6 @@ export default function ViewSwitcher({
 }: Readonly<ViewSwitcherProps>) {
   const [activeIndex, setActiveIndex] = useState(0);
 
-  // Function to switch views
   const handleViewSwitch = (index: number) => {
     setActiveIndex(index);
   };
