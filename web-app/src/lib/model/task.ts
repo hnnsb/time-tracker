@@ -10,6 +10,7 @@ export class Task {
   pauseStart: Date | undefined;
   pauseTime: number = 0;
   category: Category | undefined;
+  correction: number = 0;
 
   constructor(name: string, description: string, startTime?: Date, category?: Category) {
     this.id = uuidv4();
@@ -28,9 +29,14 @@ export class Task {
       endTime: json.endTime ? new Date(json.endTime) : undefined,
       pauseStart: json.pauseStart ? new Date(json.pauseStart) : undefined,
       category: json.category ? Category.fromJSON(json.category) : undefined,
+      correction: json.correction ? json.correction : 0, // necessary because of old data saved in local storage that hasn't got this field.
     });
   }
 
+  /**
+   * Returns the time the task has been running, without pauses.
+   * @returns {number}
+   */
   getDuration(): number {
     if (!this.isStarted()) {
       return -1;
@@ -42,14 +48,15 @@ export class Task {
         new Date().getTime() -
         this.startTime.getTime() -
         this.pauseTime -
-        (new Date().getTime() - this.pauseStart.getTime())
+        (new Date().getTime() - this.pauseStart.getTime()) +
+        this.correction
       );
     } else if (this.isRunning()) {
       // Task is running.
-      return new Date().getTime() - this.startTime.getTime() - this.pauseTime;
+      return new Date().getTime() - this.startTime.getTime() - this.pauseTime + this.correction;
     } else {
       // Task is stopped.
-      return this.endTime.getTime() - this.startTime.getTime() - this.pauseTime;
+      return this.endTime.getTime() - this.startTime.getTime() - this.pauseTime + this.correction;
     }
   }
 

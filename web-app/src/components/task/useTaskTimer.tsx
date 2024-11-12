@@ -8,15 +8,18 @@ interface UseTaskTimerProps {
 
 export function useTaskTimer({ start, getTime }: UseTaskTimerProps) {
   const [isRunning, setIsRunning] = useState<boolean>(start);
-  const [formattedTime, setFormattedTime] = useState<string>(timeAsString(getTime()));
+  const [time, setTime] = useState(getTime());
+  const [formattedTime, setFormattedTime] = useState<string>(timeAsString(time));
 
   useEffect(() => {
     let interval: NodeJS.Timeout | undefined;
 
     if (isRunning) {
       interval = setInterval(() => {
-        setFormattedTime(timeAsString(getTime()));
+        setTime(getTime());
       }, 1000);
+    } else {
+      setTime(getTime());
     }
     return () => {
       if (interval) {
@@ -24,6 +27,10 @@ export function useTaskTimer({ start, getTime }: UseTaskTimerProps) {
       }
     };
   }, [isRunning, getTime]);
+
+  useEffect(() => {
+    setFormattedTime(timeAsString(time));
+  }, [time]);
 
   const startTimer = () => {
     setIsRunning(true);

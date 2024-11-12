@@ -3,6 +3,7 @@ import { FaCheck, FaPause, FaPen, FaPlay, FaSave, FaTimes, FaTrash } from "react
 import { Task } from "../../lib/model/task";
 import { Category } from "../../lib/model/category";
 import { useTaskTimer } from "./useTaskTimer";
+import Tooltip from "../Tooltip";
 
 interface TaskCardProps {
   className?: string;
@@ -28,7 +29,9 @@ export default function TaskCard({
   const [editedTitle, setEditedTitle] = useState<string>(task.name);
   const [editedDescription, setEditedDescription] = useState<string>(task.description);
   const [editedCategoryId, setEditedCategoryId] = useState<string>(task.category?.id || "");
-
+  const [editHourOffset, setEditHourOffset] = useState<number>(0);
+  const [editMinuteOffset, setEditMinuteOffset] = useState<number>(0);
+  const [editSecondOffset, setEditSecondOffset] = useState<number>(0);
   const handleStop = () => {
     task.stop();
     stopTimer();
@@ -55,6 +58,9 @@ export default function TaskCard({
     task.name = editedTitle;
     task.description = editedDescription;
     task.category = categories.find((category) => category.id === editedCategoryId);
+    task.correction += 1000 * (3600 * editHourOffset + 60 * editMinuteOffset + editSecondOffset);
+
+    resetOffsets();
     onUpdate(task);
     setEditMode(false);
   };
@@ -63,6 +69,8 @@ export default function TaskCard({
     setEditedTitle(task.name);
     setEditedDescription(task.description);
     setEditedCategoryId(task.category?.id || "");
+    resetOffsets();
+
     setEditMode(false);
   };
 
@@ -70,6 +78,11 @@ export default function TaskCard({
     setEditedCategoryId(selectedId);
   };
 
+  const resetOffsets = () => {
+    setEditHourOffset(0);
+    setEditMinuteOffset(0);
+    setEditSecondOffset(0);
+  };
   return (
     <div
       className={`${className} p-4 flex justify-between items-center bg-light-bg_secondary dark:bg-dark-bg_secondary rounded`}
@@ -140,6 +153,47 @@ export default function TaskCard({
                       </option>
                     ))}
                   </select>
+                </div>
+                <div className="flex flex-col mb-2 mr-2">
+                  <label className="block text-sm font-medium" htmlFor="correctionInput">
+                    <Tooltip description="Add or subtract time of your task">
+                      Correction &#9432;
+                    </Tooltip>
+                  </label>
+
+                  <div className="flex gap-2">
+                    <input
+                      className="px-2 py-1 border rounded dark:bg-dark-bg_tertiary w-[70px]"
+                      type="number"
+                      id="correctionInput"
+                      onChange={(e) => setEditHourOffset(parseInt(e.target.value))}
+                      min={-999}
+                      max={999}
+                    />
+                    <span>h</span>
+                  </div>
+                  <div className="flex gap-2">
+                    <input
+                      className="px-2 py-1 border rounded dark:bg-dark-bg_tertiary w-[70px]"
+                      type="number"
+                      id=""
+                      onChange={(e) => setEditMinuteOffset(parseInt(e.target.value))}
+                      min={-999}
+                      max={999}
+                    />
+                    m
+                  </div>
+                  <div className="flex gap-2">
+                    <input
+                      className="px-2 py-1 border rounded dark:bg-dark-bg_tertiary w-[70px]"
+                      type="number"
+                      id=""
+                      onChange={(e) => setEditSecondOffset(parseInt(e.target.value))}
+                      min={-999}
+                      max={999}
+                    />
+                    <span>s</span>
+                  </div>
                 </div>
               </div>
             </div>
