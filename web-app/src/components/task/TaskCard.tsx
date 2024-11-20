@@ -112,7 +112,7 @@ export default function TaskCard({
                   </button>
                 </div>
               </div>
-              <div className="px-3 flex flex-col md:flex-row p-2">
+              <div className="px-3 flex flex-col lg:flex-row p-2">
                 <div className="flex flex-col mb-2 mr-2">
                   <label htmlFor="titleInput" className="block text-sm font-medium">
                     Title
@@ -181,7 +181,7 @@ export default function TaskCard({
                       min={-999}
                       max={999}
                     />
-                    m
+                    <span>m</span>
                   </div>
                   <div className="flex gap-2">
                     <input
