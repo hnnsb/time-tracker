@@ -4,13 +4,23 @@ import { Task } from "../../../lib/model/task";
 import TaskCard from "../TaskCard";
 import PButton from "../../PButton";
 import { DAY_NAMES } from "../../../lib/consts/days";
+import { Category } from "../../../lib/model/category";
 
 interface DatePaginationProps {
+  className?: string;
   tasks: Task[];
-  className: string;
+  categories: Category[];
+  handleTaskUpdate: (task: Task) => void;
+  handleTaskDelete: (task: Task) => void;
 }
 
-export default function TasksDateView({ tasks, className }: DatePaginationProps) {
+export default function TasksDateView({
+  className,
+  tasks,
+  categories,
+  handleTaskUpdate,
+  handleTaskDelete,
+}: Readonly<DatePaginationProps>) {
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
 
   const updateDate = (diff: number) => {
@@ -54,7 +64,13 @@ export default function TasksDateView({ tasks, className }: DatePaginationProps)
       {tasks
         .filter((task) => sameDay(task.startTime, currentDate))
         .map((task) => (
-          <TaskCard task={task} categories={[]} onDelete={() => ""} onUpdate={() => ""} />
+          <TaskCard
+            key={task.id}
+            task={task}
+            categories={categories}
+            onDelete={handleTaskDelete}
+            onUpdate={handleTaskUpdate}
+          />
         ))}
     </div>
   );

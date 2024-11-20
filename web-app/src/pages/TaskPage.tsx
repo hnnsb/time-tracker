@@ -126,14 +126,20 @@ export default function TaskPage() {
           onUpdate={handleUpdateTask}
           onDelete={handleDeleteTask}
         />
-        <TasksPerDayView className="p-2" tasks={tasks}></TasksPerDayView>
+        <TasksPerDayView
+          className="p-2"
+          tasks={tasks}
+          categories={categories}
+          handleTaskDelete={handleDeleteTask}
+          handleTaskUpdate={handleUpdateTask}
+        />
         <TasksByCategoryView
           className="p-2"
           tasks={tasks}
           categories={categories}
           onDelete={handleDeleteTask}
           onUpdate={handleUpdateTask}
-        ></TasksByCategoryView>
+        />
       </ViewSwitcher>
     </div>
   );
