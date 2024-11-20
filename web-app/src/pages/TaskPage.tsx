@@ -8,7 +8,11 @@ import CategoryCreateDialog from "../components/category/category-create-dialog"
 import CategoryDropdown from "../components/category/category-dropdown";
 import PButton from "../components/PButton";
 import ToDoList from "../components/task/ToDoList";
-import TaskList from "../components/task/TaskList";
+import TasksByDatesView from "../components/task/views/TasksByDatesView";
+import TasksPerDayView from "../components/task/views/TasksDateView";
+import ViewSwitcher from "../components/ViewSwitcher";
+import { FaBoxes, FaCalendarAlt, FaCalendarDay } from "react-icons/fa";
+import TasksByCategoryView from "../components/task/views/TasksByCategoryView";
 
 export default function TaskPage() {
   const [tasks, setTasks] = useState<Task[]>(getTasks());
@@ -36,6 +40,7 @@ export default function TaskPage() {
     setTasks([createdTask, ...tasks]);
     setShowTaskDialog(false);
   }
+
   function handleDeleteTask(task: Task) {
     deleteTask(task.id);
     setTasks(tasks.filter((other) => task.id !== other.id));
@@ -45,6 +50,7 @@ export default function TaskPage() {
     const updatedTask = putTask(task);
     setTasks(tasks.map((other) => (updatedTask.id === other.id ? updatedTask : other)));
   }
+
   function handleEditCategory(title: string, color: string) {
     if (categoryToEdit) {
       categoryToEdit.name = title;
@@ -112,17 +118,29 @@ export default function TaskPage() {
         onUpdate={handleUpdateTask}
         onDelete={handleDeleteTask}
       />
-      <h3>Progress Track</h3>
-      <TaskList
-        className="p-2"
-        tasks={tasks.filter((task) => task.isStarted())}
-        categories={categories}
-        onUpdate={handleUpdateTask}
-        onDelete={handleDeleteTask}
-      />
-      <p className="text-center text-sm text-gray-500 dark:text-gray-400 m-1">
-        {tasks.filter((task) => task.isStopped()).length} Tasks completed
-      </p>
+      <ViewSwitcher title={<h3>Progress Track</h3>} icons={[FaCalendarAlt, FaCalendarDay, FaBoxes]}>
+        <TasksByDatesView
+          className="p-2"
+          tasks={tasks.filter((task) => task.isStarted())}
+          categories={categories}
+          onUpdate={handleUpdateTask}
+          onDelete={handleDeleteTask}
+        />
+        <TasksPerDayView
+          className="p-2"
+          tasks={tasks}
+          categories={categories}
+          handleTaskDelete={handleDeleteTask}
+          handleTaskUpdate={handleUpdateTask}
+        />
+        <TasksByCategoryView
+          className="p-2"
+          tasks={tasks}
+          categories={categories}
+          onDelete={handleDeleteTask}
+          onUpdate={handleUpdateTask}
+        />
+      </ViewSwitcher>
     </div>
   );
 }
