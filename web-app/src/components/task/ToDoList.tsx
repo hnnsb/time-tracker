@@ -36,7 +36,7 @@ export default function ToDoList({ className, tasks, onUpdate, onDelete }: Reado
 
   return (
     <div className={className}>
-      <table className="rounded bg-light-bg_secondary dark:bg-dark-bg_secondary divide-y border-light-text dark:border-dark-text min-w-full">
+      <table className="rounded bg-bg_secondary divide-y border-text min-w-full">
         <thead>
           <tr>
             <th className="table-header w-1/12">Status</th>
@@ -45,14 +45,11 @@ export default function ToDoList({ className, tasks, onUpdate, onDelete }: Reado
             <th className="table-header w-1/12"></th>
           </tr>
         </thead>
-        <tbody className="bg-light-bg_primary dark:bg-dark-bg_primary">
+        <tbody className="bg-bg_primary">
           {Array.from(groupedTasks.entries()).map(([category, tasks]) => (
             <Fragment key={category.id}>
               <tr>
-                <td
-                  colSpan={4}
-                  className="table-category-header bg-light-bg_tertiary dark:bg-dark-bg_tertiary"
-                >
+                <td colSpan={4} className="table-category-header bg-bg_tertiary">
                   <span style={{ color: category.color }}>{category.name}</span>
                 </td>
               </tr>

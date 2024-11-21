@@ -84,9 +84,7 @@ export default function TaskCard({
     setEditSecondOffset(0);
   };
   return (
-    <div
-      className={`${className} p-4 flex justify-between items-center bg-light-bg_secondary dark:bg-dark-bg_secondary rounded`}
-    >
+    <div className={`${className} p-4 flex justify-between items-center bg-bg_secondary rounded`}>
       {editMode ? (
         <>
           <form id="edit-task-form" onSubmit={handleSave}>
@@ -122,7 +120,7 @@ export default function TaskCard({
                     type="text"
                     value={editedTitle}
                     onChange={(e) => setEditedTitle(e.target.value)}
-                    className="px-2 py-1 border rounded dark:bg-dark-bg_tertiary"
+                    className="px-2 py-1 border rounded bg-bg_tertiary"
                   />
                 </div>
                 <div className="flex flex-col mb-2 mr-2">
@@ -133,7 +131,7 @@ export default function TaskCard({
                     id="descriptionInput"
                     value={editedDescription}
                     onChange={(e) => setEditedDescription(e.target.value)}
-                    className="px-2 py-1 border rounded dark:bg-dark-bg_tertiary"
+                    className="px-2 py-1 border rounded bg-bg_tertiary"
                     maxLength={150}
                   />
                 </div>
@@ -142,7 +140,7 @@ export default function TaskCard({
                     Category
                   </label>
                   <select
-                    className="px-2 py-1 border rounded dark:bg-dark-bg_tertiary"
+                    className="px-2 py-1 border rounded bg-bg_tertiary"
                     value={editedCategoryId}
                     onChange={(e) => handleChangeCategory(e.target.value)}
                   >
@@ -163,7 +161,7 @@ export default function TaskCard({
 
                   <div className="flex gap-2">
                     <input
-                      className="px-2 py-1 border rounded dark:bg-dark-bg_tertiary w-[70px]"
+                      className="px-2 py-1 border rounded bg-bg_tertiary w-[70px]"
                       type="number"
                       id="correctionInput"
                       onChange={(e) => setEditHourOffset(parseInt(e.target.value))}
@@ -174,7 +172,7 @@ export default function TaskCard({
                   </div>
                   <div className="flex gap-2">
                     <input
-                      className="px-2 py-1 border rounded dark:bg-dark-bg_tertiary w-[70px]"
+                      className="px-2 py-1 border rounded bg-bg_tertiary w-[70px]"
                       type="number"
                       id=""
                       onChange={(e) => setEditMinuteOffset(parseInt(e.target.value))}
@@ -185,7 +183,7 @@ export default function TaskCard({
                   </div>
                   <div className="flex gap-2">
                     <input
-                      className="px-2 py-1 border rounded dark:bg-dark-bg_tertiary w-[70px]"
+                      className="px-2 py-1 border rounded bg-bg_tertiary w-[70px]"
                       type="number"
                       id=""
                       onChange={(e) => setEditSecondOffset(parseInt(e.target.value))}

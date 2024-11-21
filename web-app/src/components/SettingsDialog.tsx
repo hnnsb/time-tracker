@@ -9,15 +9,12 @@ export default function SettingsDialog() {
   };
   return (
     <div>
-      <button
-        onClick={toggleDialog}
-        className="btn p-2 dark:text-light-bg_primary"
-      >
-        <FaGear />
+      <button onClick={toggleDialog} className="btn p-2">
+        <FaGear className="text-text" />
       </button>
       {isOpen && (
         <div className="absolute top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-gray-500 bg-opacity-50">
-          <div className="p-4 rounded bg-gray-100 dark:bg-gray-800 text-light-text dark:text-dark-text">
+          <div className="p-4 rounded bg-gray-100 dark:bg-gray-800 text-text">
             <h2 className="text-lg">Settings</h2>
             <Button
               onClick={() => {
