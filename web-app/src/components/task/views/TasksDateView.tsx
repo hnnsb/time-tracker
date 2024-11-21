@@ -33,19 +33,19 @@ export default function TasksDateView({
     <div className={className}>
       <div className={"flex mb-2"}>
         <PButton
-          className={"rounded-none rounded-l-full border-1 border-bg_primary"}
+          className={"rounded-none rounded-l-full border-1 dark:border-dark-bg_primary"}
           onClick={() => updateDate(-1)}
         >
           <FaChevronLeft />
         </PButton>
         <PButton
-          className={"rounded-none border-1 border-bg_primary"}
+          className={"rounded-none border-1 dark:border-dark-bg_primary"}
           onClick={() => setCurrentDate(new Date())}
         >
           Today
         </PButton>
         <PButton
-          className={" rounded-none rounded-r-full border-1 border-bg_primary"}
+          className={" rounded-none rounded-r-full border-1 dark:border-dark-bg_primary"}
           onClick={() => updateDate(1)}
         >
           <FaChevronRight />

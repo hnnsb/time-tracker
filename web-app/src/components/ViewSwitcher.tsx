@@ -34,7 +34,7 @@ export default function ViewSwitcher({
               <button
                 className={`border-1  hover:bg-blue-500 px-3 py-2 font-semibold 
                           ${isFirst ? "rounded-l-full" : ""} ${isLast ? "rounded-r-full" : ""}
-                          ${isSelected ? "bg-bg_primary border-blue-600 text-blue-600" : "bg-blue-600 text-white border-bg_primary"}
+                          ${isSelected ? "bg-light-bg_primary dark:bg-dark-bg_primary border-blue-600 text-blue-600" : "bg-blue-600 text-white border-light-bg_primary dark:border-dark-bg_primary"}
                           `}
                 key={index}
                 onClick={() => handleViewSwitch(index)}

@@ -9,7 +9,10 @@ export default function ThemeSwitcher(props: Readonly<{ className: string }>) {
   };
 
   return (
-    <button onClick={toggleTheme} className={`${props.className} p-2 rounded text-text`}>
+    <button
+      onClick={toggleTheme}
+      className={`${props.className} p-2 rounded dark:text-light-bg_primary`}
+    >
       {theme === "dark" ? <FaSun /> : <FaMoon />}
     </button>
   );

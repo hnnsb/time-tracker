@@ -13,7 +13,7 @@ export default function AppRouter() {
   return (
     <Router>
       <NavBar />
-      <div className="container text-text pt-3">
+      <div className="container dark:text-dark-text pt-3">
         <Routes>
           <Route path={RoutePaths.TASKS} element={<TaskPage />} />
         </Routes>

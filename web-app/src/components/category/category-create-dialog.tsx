@@ -25,7 +25,7 @@ export default function CategoryCreateDialog({
   }, []);
   return (
     <div className="absolute top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-gray-500 bg-opacity-50">
-      <div className="p-4 rounded bg-gray-100 dark:bg-gray-800 text-text">
+      <div className="p-4 rounded bg-gray-100 dark:bg-gray-800 text-light-text dark:text-dark-text">
         <h2 className="text-lg">Create New Category</h2>
         <label htmlFor={"categoryName"}>Name</label>
         <input
@@ -52,7 +52,10 @@ export default function CategoryCreateDialog({
         >
           Save
         </button>
-        <button onClick={onClose} className="px-4 py-2 text-white bg-gray-500 rounded">
+        <button
+          onClick={onClose}
+          className="px-4 py-2 text-white bg-gray-500 rounded"
+        >
           Cancel
         </button>
       </div>
