@@ -7,12 +7,12 @@ import NavBar from "./components/NavBar";
 import TaskPage from "./pages/TaskPage";
 
 export default function App() {
-  document.body.className = "bg-light-bg_primary dark:bg-dark-bg_primary";
+  document.body.className = "bg-bg_primary";
 
   return (
     <ThemeProvider>
       <NavBar />
-      <div className="container dark:text-dark-text pt-3">
+      <div className="container text-text pt-3">
         <TaskPage />
       </div>
     </ThemeProvider>

@@ -21,3 +21,27 @@ code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+@layer base {
+    :root[data-theme="light"] {
+        --color-primary: 52, 144, 220;
+        --color-secondary: 5, 55, 94;
+        --color-tertiary: 10, 0, 63;
+        --color-bg_primary: 248, 249, 250;
+        --color-bg_secondary: 226, 227, 229;
+        --color-bg_tertiary: 220, 225, 236;
+        --color-text: 40, 40, 40;
+        --color-danger: 227, 52, 47;
+    }
+
+    :root[data-theme="dark"] {
+        --color-primary: 87, 160, 224;
+        --color-secondary: 24, 99, 107;
+        --color-tertiary: 30, 67, 218;
+        --color-bg_primary: 26, 32, 44;
+        --color-bg_secondary: 45, 55, 72;
+        --color-bg_tertiary: 56, 63, 80;
+        --color-text: 226, 232, 240;
+        --color-danger: 87, 0, 0;
+    }
+}
